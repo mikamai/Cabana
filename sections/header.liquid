@@ -1,0 +1,348 @@
+{% comment %} Settings Slide Out Navigation {% endcomment %}
+{% assign menuPrimary = section.settings.menu_1_list %}
+{% assign menuSecondary = section.settings.menu_2_list %}
+
+<style>
+.main-logo .logo {max-width: {{ section.settings.logo_max_width | append: 'px' }}; }
+</style>
+
+<header class="site-header is-absolute" data-section-type="header" id="header">
+    <div class="container">
+        <div class="row row-lg">
+            <div class="header-fix-cont">
+                <div class="header-fix-cont-inner">
+                    <a href="#menu" class="js-menuToggle menuToggle nav-item-fixed nav-item" data-target="nav">
+                        <div id="hamburger-menu" class="icon-menu">
+                            <img alt="icon-menu-open" src='{{"icon_fallback_menu.png" | asset_url }}' class="ie8-hidden icon-menu-open">
+                            <img alt="icon-menu-close" src='{{"icon_fallback_close.png" | asset_url }}' class="ie8-hidden icon-menu-close">
+                            <div class="diamond-bar"></div>
+                            <div id="hamburger-bar" class="icon-bar"></div>
+                        </div>
+                    </a>
+
+                    <a id="cartTotal" href="/cart" aria-label="{{ 'cart.labels.items_added' | t }}" class="js-cartToggle cartToggle nav-item-fixed nav-item diamond-outline">
+                        <svg width="40px" height="48px" viewBox="0 0 40 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Group">
+                                    <polygon id="Rectangle-2" fill="#FFFFFF" points="4 17 36 17 38 46 1 46"></polygon>
+                                    <path d="M39.6,46.7 L36,16.7 C35.9,16.2 35.5,15.8 35,15.8 L29.9,15.8 L29.9,9.9 C29.9,4.4 25.4,0 20,0 C14.6,0 10.1,4.4 10.1,9.9 L10.1,15.8 L5,15.8 C4.5,15.8 4.1,16.2 4,16.7 L0.4,46.9 C0.4,47.2 0.5,47.5 0.6,47.7 C0.8,47.9 1.1,48 1.4,48 L38.6,48 C38.6,48 38.6,48 38.6,48 C39.2,48 39.6,47.6 39.6,47 C39.6,46.9 39.6,46.8 39.6,46.7 Z M12.1,9.9 C12.1,5.5 15.6,2 20,2 C24.4,2 27.9,5.5 27.9,9.9 L27.9,15.8 L12.1,15.8 L12.1,9.9 Z M2.5,46 L5.9,17.8 L10.1,17.8 L10.1,20 C10.1,20.6 10.5,21 11.1,21 C11.7,21 12.1,20.6 12.1,20 L12.1,17.8 L27.9,17.8 L27.9,20 C27.9,20.6 28.3,21 28.9,21 C29.5,21 29.9,20.6 29.9,20 L29.9,17.8 L34.1,17.8 L37.5,46 L2.5,46 Z" id="Shape" fill="#000000" fill-rule="nonzero"></path>
+                                </g>
+                            </g>
+                        </svg>
+                        <div id="CartToggleItemCount" class="cartToggle-items">{{cart.item_count}}</div>
+                    </a> 
+                </div>
+            </div>
+            {%if template == 'index' %}
+            {% if section.settings.logo %}
+                <a tabindex= "-1" href="/" class="visible-nav-link nav-item main-logo">
+                    <img  src="{{ section.settings.logo | img_url: 'original' }}" title="{{ shop.name }}" class="logo"/>
+                </a>
+            {% else %}
+              {% if section.settings.show_site_name %}
+                  <h1 class="nav-item main-logo main-logo__text" itemscope itemtype="http://schema.org/Organization">
+                      <a id="shopName" href="/" itemprop="url">{{ shop.name | escape }}</a>
+                  </h1>
+                {% endif %}
+            {% endif %}
+            {% else %}
+             {% if section.settings.logo_other %}
+                <a tabindex= "-1" href="/" class="visible-nav-link nav-item main-logo">
+                    <img  src="{{ section.settings.logo_other | img_url: 'original' }}" title="{{ shop.name }}" class="logo"/>
+                </a>
+            {% else %}
+                {% if section.settings.show_site_name %}
+                <h1 class="nav-item main-logo main-logo__text" itemscope itemtype="http://schema.org/Organization">
+                    <a id="shopName" href="/" itemprop="url">{{ shop.name | escape }}</a>
+                </h1>
+                {% endif %}
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+{% comment %} Site Navigation {% endcomment %}
+<nav role="navigation" class="nav-container style-default">
+  <div class="nav-inner">
+
+    <div class="nav-mobile-close js-menuToggle">
+      <i class="icon-close"></i>
+    </div>
+    <div class="nav-search">
+      {% if section.settings.show_search %}
+      <a id= "firstFocus" class="js-searchToggle searchToggle">
+        <i class="icon-search"></i><i class="icon-close"></i><span class = "h4">{{ 'general.slide_out_navigation.search_label' | t }}</span>
+      </a>
+      <div class="nav-search-overlay">
+        <form action="/search" method="get" class="search-form" role="search">
+          <div class="inputGroup">
+            <label for="search-field" class="accessible-label">{{ 'general.slide_out_navigation.search_label' | t }}</label>
+            <input tabindex= "-1" class="nav-search-input" name="q" type="search" id="search-field" placeholder="{{ 'general.slide_out_navigation.search_placeholder' | t }}" value="{{ search.terms | escape }}" />
+            <input type="hidden" name="type" value="product" />
+            <button tabindex= "-1" type="submit" class="nav-search-submit icon-arrow-right"></button>
+          </div>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+    <nav class="menu">
+      {% comment %}
+        This block of liquid code supports non-unicode languages and should not be altered.
+      {% endcomment %}
+      {% if menuPrimary != blank %}
+        {% for link in linklists[menuPrimary].links %}
+          {% assign has_sub_menu = false %}
+          {% assign parent_link_active = false %}
+          {% assign child_list_handle = link.title | handle %}
+
+          {% if child_list_handle == '' %}
+            {% for i in (0..8) %}
+              {% unless has_sub_menu %}
+                {% if forloop.first %}
+                  {% assign temp = 'link-list' %}
+                {% else %}
+                  {% capture temp %}link-list-{{ i }}{% endcapture %}
+                {% endif %}
+
+                {% if linklists[temp] and linklists[temp].links.size > 0 and linklists[temp].title == link.title %}
+                  {% assign has_sub_menu = true %}
+                  {% assign child_list_handle = temp %}
+                {% endif %}
+              {% endunless %}
+            {% endfor %}
+          {% else %}
+            {% if linklists[child_list_handle] and linklists[child_list_handle].links.size > 0 %}
+              {% assign has_sub_menu = true %}
+              {% for child_link in linklists[child_list_handle].links %}
+                {% if page_title == child_link.title %}
+                  {% assign parent_link_active = true %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+
+          <li class="menu-item{% if has_sub_menu == true %} has-submenu{% endif %}">
+            <!-- LINKS -->
+            <a {% if forloop.first and section.settings.show_search == false %}id="firstFocus"{% endif %} class = "visible-nav-link" tabindex= "-1" href="{{ link.url }}">{{ link.title | escape }}</a>
+
+            {% if parent_link_active or link.active %}
+              {% capture list_handle %}{{ link.title | handle }}{% endcapture %}
+            {% endif %}
+
+            {% if linklists[child_list_handle].links.size > 0 %}
+              {% assign links_number = 0 %}
+              {% for sublink in linklists[child_list_handle].links %}
+                {% assign links_number = links_number | plus: 1 %}
+              {% endfor %}
+
+              <ul class="submenu">
+                <!-- BACK LINK -->
+                <li class="submenu-back">
+                  <a class="submenu-back--link" data-sub-links="{{ links_number }}" tabindex= "-1" href="#0">{{ link.title | escape }}</a>
+                </li>
+
+                <!-- SUBMENU LINKS -->
+                {% for sublink in linklists[child_list_handle].links %}
+                  <li class="submenu-item">
+                    <a {% if forloop.last == true  %} data-last="true" {% endif %} class = "submenu-item--link" tabindex= "-1" href="{{ sublink.url }}">{{ sublink.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+           {% endif %}
+          </li>
+        {% endfor %}
+      {% endif %}
+
+      {% comment %}
+        This is the same as the above list, but for the extra link list uses can enable.
+        This block of liquid code supports non-unicode languages and should not be altered.
+      {% endcomment %}
+      {% if menuSecondary != blank %}
+        <span class="menu-divider menu-item"></span>
+
+        {% for link in linklists[menuSecondary].links %}
+          {% assign has_sub_menu = false %}
+          {% assign parent_link_active = false %}
+          {% assign child_list_handle = link.title | handle %}
+
+          {% if child_list_handle == '' %}
+            {% for i in (0..8) %}
+              {% unless has_sub_menu %}
+                {% if forloop.first %}
+                  {% assign temp = 'link-list' %}
+                {% else %}
+                  {% capture temp %}link-list-{{ i }}{% endcapture %}
+                {% endif %}
+
+                {% if linklists[temp] and linklists[temp].links.size > 0 and linklists[temp].title == link.title %}
+                  {% assign has_sub_menu = true %}
+                  {% assign child_list_handle = temp %}
+                {% endif %}
+              {% endunless %}
+            {% endfor %}
+          {% else %}
+            {% if linklists[child_list_handle] and linklists[child_list_handle].links.size > 0 %}
+              {% assign has_sub_menu = true %}
+              {% for child_link in linklists[child_list_handle].links %}
+                {% if page_title == child_link.title %}
+                  {% assign parent_link_active = true %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+
+          <li class="menu-item{% if has_sub_menu == true %} has-submenu{% endif %}">
+            <!-- LINKS -->
+            <a class = "visible-nav-link" tabindex= "-1" href="{{ link.url }}">{{ link.title | escape }}</a>
+            
+            {% if parent_link_active or link.active %}
+              {% capture list_handle %}{{ link.title | handle }}{% endcapture %}
+            {% endif %}
+
+            {% if linklists[child_list_handle].links.size > 0 %}
+              <ul class="submenu">
+                <!-- BACK LINK -->
+                <li class="submenu-back">
+                  <a tabindex= "-1" href="#0">{{ link.title | escape }}</a>
+                </li>
+
+                <!-- SUBMENU LINKS -->
+                {% for sublink in linklists[child_list_handle].links %}
+                  <li class="submenu-item">
+                    <a tabindex= "-1" href="{{ sublink.url }}">{{ sublink.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      {% endif %}
+
+      {% if shop.customer_accounts_enabled %}
+        <span class="menu-divider menu-item"></span>
+        <li class="login-links h4">
+          {% if customer %}
+            <a class = "visible-nav-link" tabindex= "-1" href="/account">{{ 'customer.link.my_account' | t }}</a>
+            /
+            <a class = "visible-nav-link" tabindex= "-1" href="/account/logout">{{ 'customer.link.logout' | t }}</a>
+          {% else %}
+            <a class = "visible-nav-link" tabindex= "-1" href="/account/login">{{ 'customer.link.login' | t }}</a>
+            /
+            <a class = "visible-nav-link" tabindex= "-1" href="/account/register">{{ 'customer.link.sign_up' | t }}</a>
+          {% endif %}
+        </li>
+      {% endif %}
+    </nav>
+
+    <div class="nav-footer">
+        <div class="nav-social">
+          {% if settings.twitter_url != '' %}
+            <a tabindex= "-1" aria-label = "{{ 'general.footer.twitter' | t }}" href="{{settings.twitter_url}}" target="_blank" class="visible-nav-link nav-social-link icon-twitter"></a>
+          {% endif %}
+
+          {% if settings.facebook_url != '' %}
+            <a tabindex= "-1" aria-label = "{{ 'general.footer.facebook' | t }}" href="{{settings.facebook_url}}" target="_blank" class="visible-nav-link nav-social-link icon-facebook"></a>
+          {% endif %}
+
+          {% if settings.instagram_url != '' %}
+            <a tabindex= "-1" aria-label = "{{ 'general.footer.instagram' | t }}" href="{{settings.instagram_url}}" target="_blank" class="visible-nav-link nav-social-link icon-instagram"></a>
+          {% endif %}
+
+          {% if settings.pinterest_url != '' %}
+            <a tabindex= "-1" aria-label = "{{ 'general.footer.pinterest' | t }}"  href="{{settings.pinterest_url}}" target="_blank" class="visible-nav-link nav-social-link icon-pinterest"></a>
+          {% endif %}
+
+          {% if settings.googleplus_url != '' %}
+            <a tabindex= "-1" aria-label = "{{ 'general.footer.googleplus' | t }}" href="{{settings.googleplus_url}}" target="_blank" class="visible-nav-link nav-social-link icon-googleplus"></a>
+          {% endif %}
+
+          {% if settings.youtube_url != '' %}
+            <a tabindex= "-1" aria-label = "{{ 'general.footer.youtube' | t }}" href="{{settings.youtube_url}}" target="_blank" class="visible-nav-link nav-social-link icon-youtube"></a>
+          {% endif %}
+
+          {% if settings.tumblr_url != '' %}
+            <a tabindex= "-1" aria-label = "{{ 'general.footer.tumblr' | t }}" href="{{settings.tumblr_url}}" target="_blank" class="visible-nav-link nav-social-link icon-tumblr"></a>
+          {% endif %}
+
+          {% if settings.rss_url != '' %}
+            <a tabindex= "-1" aria-label = "{{ 'general.footer.rss' | t }}" href="{{settings.rss_url}}" target="_blank" class="visible-nav-link nav-social-link icon-rss"></a>
+          {% endif %}
+          <span tabindex="-1" class="last-focusable-element"></span>
+        </div>
+    </div>
+  </div>
+</nav>
+
+
+{% unless template == 'cart' %}
+  <div class="cartContainer">
+    <div class="scroll">
+      {% include 'site-cart' %}
+    </div>
+  </div>
+{% endunless %}
+
+{% comment %} Adds room to the top of the page under the fixed header. {% endcomment %}
+{% unless template contains 'index' %}
+      <div class="bodyWrap-spacer"></div>
+{% endunless %}
+
+
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Custom logo (Home page)",
+      "info": "440px width recommended"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_other",
+      "label": "Custom logo (all other pages)",
+      "info": "440px width recommended"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_site_name",
+      "label": "Show site name",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": "Custom logo width (in pixels)",
+      "min": 50,
+      "max": 600,
+      "default": 100,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Menus"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1_list",
+      "label": "Primary menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2_list",
+      "label": "Secondary menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search box",
+      "default":true
+    }
+  ]
+}
+{% endschema %}

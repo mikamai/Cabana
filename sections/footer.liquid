@@ -1,0 +1,257 @@
+{% comment %}
+Set the width of the column based on the number of blocks.
+{% endcomment %}
+{% assign blocks_total = section.blocks.size %}
+
+{% if blocks_total <= 3 %}
+  {% assign col_width = 'lg_s14' %}
+{% else %}
+  {% assign col_width = 'lg_s15' %}
+{% endif %}
+
+<section class="container-wrap" data-section-type="footer">
+    <footer class="site-footer container pad-lg">
+        <div class="footer-inner row row-lg inline u-center">
+            {% comment %}<span class="icon-divider"></span>{% endcomment %}
+            
+            {% for block in section.blocks %}
+
+                {% if blocks_total == 3 %}
+                  {% if forloop.index == 1 %}
+                    {% assign text_position = 'text--left' %}
+                  {% elsif forloop.index == 2 %}
+                    {% assign text_position = 'text--center' %}
+                  {% else %}
+                    {% assign text_position = 'text--right' %}
+                  {% endif %}
+                {% endif %}
+
+                {% case block.type %}
+                {% when 'link-list' %}
+
+                    {% assign nav = block.settings.nav  %}
+                    {% assign hideMobile = block.settings.hide_mobile %}
+
+                    <ul class="footer-links block s1 sm_s13 {{ col_width }} {% if hideMobile == true %}hide-mobile{%endif%} {{text_position}}" {{ block.shopify_attributes }}>
+                        <p class="footer-link-title">{{ linklists[nav].title }}</p>
+                        {% for link in linklists[nav].links %}
+                            <li class="footer-link">
+                                <a href="{{ link.url }}">{{ link.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    {% when 'text' %}
+
+                    {% assign hideMobile = block.settings.hide_mobile %}
+
+                    <ul class="footer-links block s1 sm_s13 {{ col_width }} {% if hideMobile == true %}hide-mobile{%endif%} {{text_position}}" {{ block.shopify_attributes }}>
+                        <p class="footer-link-title">{{ block.settings.heading }}</p>
+                        <p class = "footer-text footer-link">{{block.settings.text}}</p>
+                    </ul>
+         
+
+                {% when 'location' %}
+                    {% if block.settings.footer_location_title != blank or block.settings.footer_location_url != blank or block.settings.footer_location_1 != blank or block.settings.footer_location_2 != blank or block.settings.footer_location_3 != blank %}
+                        <ul class="footer-links block s1 sm_s13 {{ col_width }} {{text_position}}" {{ block.shopify_attributes }}>
+                            <p class="footer-link-title">{{ block.settings.footer_location_title }}</p>
+                            <li class="footer-link">
+                                {% unless block.settings.footer_location_url == blank %}
+                                    <a href="{{ block.settings.footer_location_url }}" target="_blank">
+                                {% else %}
+                                    <span class="location">
+                                {% endunless %}
+
+                                {{ block.settings.footer_location_1 }}
+
+                                {% unless block.settings.footer_location_2 == blank %}
+                                    <br/>
+                                    {{ block.settings.footer_location_2 }}
+                                {% endunless %}
+
+                                {% unless block.settings.footer_location_3 == blank %}
+                                    <br/>
+                                    {{ block.settings.footer_location_3 }}
+                                {% endunless %}
+
+                                {% unless block.settings.footer_location_url == blank %}
+                                    </a>
+                                {% else %}
+                                    </span>
+                                {% endunless %}
+                            </li>
+                        </ul>
+                    {% endif %}
+
+                {% when 'social' %}
+
+                    <ul class="footer-links footer-social block s1 sm_s13 {{ col_width }} {{text_position}}">
+                    <p class="footer-link-title">{{ block.settings.heading }}</p>
+                    {% if settings.twitter_url != '' %}
+                        <li class="footer-link footer-link-social">
+                            <a href="{{settings.twitter_url}}" target="_blank">
+                                <span class="icon-twitter"></span>
+                                {{ 'general.footer.twitter' | t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if settings.facebook_url != '' %}
+                        <li class="footer-link footer-link-social">
+                            <a href="{{settings.facebook_url}}" target="_blank">
+                                <span class="icon-facebook"></span>
+                                {{ 'general.footer.facebook' | t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if settings.instagram_url != '' %}
+                        <li class="footer-link footer-link-social">
+                            <a href="{{settings.instagram_url}}" target="_blank">
+                                <span class="icon-instagram"></span>
+                                {{ 'general.footer.instagram' | t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if settings.googleplus_url != '' %}
+                        <li class="footer-link footer-link-social">
+                            <a href="{{settings.googleplus_url}}" target="_blank">
+                                <span class="icon-googleplus"></span>
+                                {{ 'general.footer.googleplus' | t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if settings.pinterest_url != '' %}
+                        <li class="footer-link footer-link-social">
+                            <a href="{{settings.pinterest_url}}" target="_blank">
+                                <span class="icon-pinterest"></span>
+                                {{ 'general.footer.pinterest' | t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if settings.youtube_url != '' %}
+                        <li class="footer-link footer-link-social">
+                            <a href="{{settings.youtube_url}}" target="_blank">
+                                <span class="icon-youtube"></span>
+                                {{ 'general.footer.youtube' | t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if settings.tumblr_url != '' %}
+                        <li class="footer-link footer-link-social">
+                            <a href="{{settings.tumblr_url}}" target="_blank">
+                                <span class="icon-tumblr"></span>
+                                {{ 'general.footer.tumblr' | t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if settings.rss_url != '' %}
+                        <li class="footer-link footer-link-social">
+                            <a href="{{settings.rss_url}}" target="_blank">
+                                <span class="icon-rss"></span>
+                                {{ 'general.footer.rss' | t }}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                  {% endcase %}
+                {% endfor %}
+        </div>
+
+       
+    </footer>
+</section>
+
+{% schema %}
+   {
+  "name": "Footer",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "link-list",
+      "name": "Link list",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "nav",
+          "label": "Footer column"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_mobile",
+          "label": "Hide on mobile",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "location",
+      "name": "Location",
+        "settings": [
+            {
+              "type": "text",
+              "id": "footer_location_title",
+              "label": "Location title",
+              "default":"Modular"
+            },
+            {
+              "type": "text",
+              "id": "footer_location_1",
+              "label": "Address line 1",
+              "default":"566 Emerson Street"
+            },
+            {
+              "type": "text",
+              "id": "footer_location_2",
+              "label": "Address line 2",
+              "default":"Palo Alto, California"
+            },
+            {
+              "type": "text",
+              "id": "footer_location_3",
+              "label": "Address line 3",
+              "default":"USA 66209"
+            },
+            {
+              "type": "text",
+              "id": "footer_location_url",
+              "label": "Google Maps URL",
+              "info": "[Find your location URL](https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en&oco=1)"
+            }
+        ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+        "settings": [
+            {
+              "type": "text",
+              "id": "heading",
+              "label": "Heading",
+              "default":"Modular"
+            },
+            {
+              "type": "textarea",
+              "id": "text",
+              "label": "Text",
+              "default":"This is an opportunity to leave your users with a final note about your store, i.e. your values, return policy, or guarantee."
+            }
+        ]
+    },
+    {
+      "type": "social",
+      "name": "Social media",
+        "settings": [
+            {
+              "type": "paragraph",
+              "content":"Edit your social settings and accounts in General settings"
+            },
+            {
+              "type": "text",
+              "id": "heading",
+              "label": "Heading",
+              "default":"Connect"
+            }
+        ]
+    }
+  ]
+}
+{% endschema %}

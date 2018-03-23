@@ -1,0 +1,58 @@
+{% comment %} Settings {% endcomment %}
+{% assign title = section.settings.title %}
+{% assign content = section.settings.content %}
+
+{% comment %} Section {% endcomment %}
+<section class="container-wrap" data-section-type="newsletter">
+    <div class="container signUp">
+        <div class="row row-lg">
+                <h1 class="bold">{{ title }}</h1>
+            {% if content != blank %}
+                <p class="h4" class="signUp-body">{{ content }}</p>
+            {% endif %}
+            {% form 'customer' %}
+                <div class="js-signUp-form signUp-form">
+                    <input type="hidden" id="contact_tags" name="contact[tags]" value="newsletter"/>
+                    <div class="inputGroup mc-field-group">
+                        <label for="mce-EMAIL" class="accessible-label">{{ 'general.slide_out_navigation.search_label' | t }}</label>
+                        <input class="signUp-input required email" type="email" value="" name="contact[email]" id="mce-EMAIL" placeholder="{{ 'general.newsletter_signup.email_placeholder' | t }}">
+                        <input type="hidden" id="newsletter-first-name" name="contact[first_name]" value="Newsletter" />
+                        <input type="hidden" id="newsletter-last-name" name="contact[last_name]" value="Subscriber" />
+                        <span class="signUp-mailIcon icon-mail"></span>
+                        <button type="submit" class="signUp-submit icon-arrow-right" name="subscribe" id="mc-embedded-subscribe"></button>
+                    </div>
+                </div>
+                {% if form.posted_successfully? %}
+                    <div class="signUp-confirmation p">{{ 'general.newsletter_signup.success_message' | t }}</div>
+                {% elsif form.errors %}
+                    {{ form.errors | default_errors }}
+                {% endif %}
+            {% endform %}
+        </div>
+    </div>
+</section>
+
+{% comment %} Schema {% endcomment %}
+{% schema %}
+    {
+        "name": "Newsletter",
+        "settings": [ {
+            "type": "header",
+            "content": "Content"
+        }, {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Newsletter"
+        }, {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content",
+            "default":"<p>Let's keep in touch</p>"
+        } ],
+        "presets": [ {
+            "category": "Promotional",
+            "name": "Newsletter"
+        } ]
+    }
+{% endschema %}

@@ -1,0 +1,12 @@
+{% comment %}{% capture link %}
+		<a href="collections/all">{{ 'general.404.page_link' | t }}</a>
+{% endcapture %}{% endcomment %}
+
+<div class="container">
+	<div class="row-lg u-center">
+		<h1 class="centered">{{ 'general.404.title' | t }}</h1>
+		{% comment %}<h2 class="delta centered"> {{ 'general.404.subtext_html' | t: link: link }} </h2>{% endcomment %}
+		<p class="delta centered">{{ 'general.404.subtext_html' | t }} </p>
+		<a class="fourOhFour-button button" href="/collections/all">{{ 'general.404.continue_shopping' | t }}</a>
+	</div>
+</div>

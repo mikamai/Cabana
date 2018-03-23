@@ -1,0 +1,102 @@
+{% comment %} Settings {% endcomment %}
+{% assign collection1 = collections[section.settings.collection1] | default: false %}
+{% assign title = section.settings.title %}
+
+{% comment %} Layout {% endcomment %}
+{% assign rows = section.settings.rows | plus: 0 %}
+{% assign productLimit = rows | times: 3 %}
+
+{% comment %} Section {% endcomment %}
+<section class="collectionGrid container-wrap js-collection-grid" id="collection-module-{{ section.id }}" data-section-type="collection-grid">
+    <div class="container">
+        <div class="collectionGrid-header row row-sm">
+            {% if title != blank %}
+                <div class="block s1">
+                    <h1 class="bold">{{ title }}</h1>
+                </div>
+            {% endif %}
+        </div>
+
+        {% comment %} SLIDES {% endcomment %}
+        <div class="collectionGrid-slider js-collection-slider" data-slick="{ 'swipe':false, 'draggable':false, 'arrows':false, 'adaptiveHeight':true, 'infinite':false }">
+
+           {% comment %}
+
+          limit = 3*number of rows
+          if number of products in collection < limit try one row less ad infitum
+            {% endcomment %}
+
+
+            {% comment %} N.B.: SLIDE - Each slide is a collection, arranged as a grid of inline-block elements. {% endcomment %}
+            {% comment %} SLIDE 1 {% endcomment %}
+            <div class="js-slide collectionGrid-slider-slide">
+                <div class="collectionGrid-row row inline row-lg">
+
+                    {% comment %} Collection Block, contains .js-quickView {% endcomment %}
+                    {% if collection1 %}
+                        {% for product in collection1.products limit: productLimit  %}
+                            {% include 'collectionGrid-block' %}
+                        {% endfor %}
+                    {% else %}
+                        {% for i in (1..productLimit) %}
+                            {% include 'collectionGrid-block', fallback: true %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {% comment %} Spacers for inline-block based collectionGrid {% endcomment %}
+                    <div class="gridSpacer item block s1 sm_s12 lg_s13"></div>
+                    <div class="gridSpacer item block s1 sm_s12 lg_s13"></div>
+                </div>
+
+                {% comment %} Shop All Link {% endcomment %}
+                <div class="row row-med inline u-center">
+                    <a href="{{ collection1.url }}" class="button inline">
+                        {{ 'collections.grid.shop_all' | t }} {{ collection1.title }}
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% comment %} Schema {% endcomment %}
+{% schema %}
+    {
+  "name": "Featured collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "collection",
+      "id": "collection1",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "rows",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Rows",
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "category": "Collection",
+      "name": "Featured collection",
+      "settings": {
+        "collection1": "frontpage"
+      }
+    }
+  ]
+}
+{% endschema %}

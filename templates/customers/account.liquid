@@ -1,0 +1,127 @@
+<!-- /templates/customers/account.liquid -->
+{% comment %}
+
+  For all available customer liquid tags:
+    - http://docs.shopify.com/themes/liquid-variables/customer
+
+{% endcomment %}
+{% paginate customer.orders by 10 %}
+
+<div class="account-home container">
+  <div class="account-title row row-lg">
+    <h1 class="bold">{{ 'customer.account.title' | t }}</h1>
+  </div>
+
+  <div class="row row-lg inline">
+    <div class="block s1 lg_s23">
+      <h2>{{ 'customer.orders.title' | t }}</h2>
+
+      {% comment %}
+        If we have past orders, loop through each one
+      {% endcomment %}
+        {% if customer.orders.size != 0 %}
+
+          <div class="block s1">
+            <div class="account-table account-home-table d-table med_d-block">
+              <div class="d-table-header">
+                <div class="d-table-row">
+                  <div class="order-number c-gray d-table-cell">{{ 'customer.orders.order_number' | t }}</div class="d-table-cell">
+                  <div class="c-gray d-table-cell">{{ 'customer.orders.date' | t }}</div class="d-table-cell">
+                  <div class="c-gray d-table-cell">{{ 'customer.orders.payment_status' | t }}</div class="d-table-cell">
+                  <div class="c-gray d-table-cell">{{ 'customer.orders.fulfillment_status' | t }}</div class="d-table-cell">
+                  <div class="order-total c-gray d-table-cell">{{ 'customer.orders.total' | t }}</div class="d-table-cell">
+                </div>
+              </div>
+              <div class="d-table-row-group med_d-block">
+                {% for order in customer.orders %}
+                  <div class="order d-table-row med_d-block">
+                    <div class="order-number c-2 d-table-cell med_d-block">
+                      <h4 class="med_show c-gray">{{ 'customer.orders.order_number' | t }}: </h4>
+                      {{ order.name | link_to: order.customer_url }}
+                    </div>
+                    <div class="d-table-cell med_d-block">
+                      <h4 class="med_show c-gray">{{ 'customer.orders.date' | t }}</h4>
+                      {{ order.created_at | date: format: 'month_day_year' }}
+                    </div>
+                    <div class="d-table-cell med_d-block">
+                      <h4 class="med_show c-gray">{{ 'customer.orders.payment_status' | t }}</h4>
+                      {{ order.financial_status_label }}
+                    </div>
+                    <div class="d-table-cell med_d-block">
+                      <h4 class="med_show c-gray">{{ 'customer.orders.fulfillment_status' | t }}</h4>
+                      {{ order.fulfillment_status_label }}
+                    </div>
+                    <div class="order-total d-table-cell med_d-block">
+                      <h4 class="med_show c-gray">{{ 'customer.orders.total' | t }}</h4>
+                      {{ order.total_price | money }}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+        {% else %}
+
+          <p>{{ 'customer.orders.none' | t }}</p>
+
+      {% endif %}
+      
+      {% if paginate.pages > 1 %}
+        <div class="pagination h2">
+          {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
+        </div>
+      {% endif %}
+      {% comment %}{% if paginate.next.is_link or paginate.previous.is_link %}
+        <p class="prev-next"> 
+          {% if paginate.previous.is_link %}
+          <span class="left">{{ 'blog.blog_list_view.newer_articles' | t | link_to: paginate.previous.url }}</span>
+          {% endif %}
+          {% if paginate.next.is_link %}
+          <span class="right">{{ 'blog.blog_list_view.older_articles' | t | link_to: paginate.next.url }}</span>
+          {% endif %}
+        </p>
+      {% endif %}{% endcomment %}
+    </div>
+
+    <div class="account-details block s1 lg_s14">
+      <h2>{{ 'customer.account.details' | t }}</h2>
+
+      <p><strong>{{ customer.name }}</strong><br>
+
+      {% if customer.default_address != nil %}
+      <p>
+        {{ customer.default_address.address1 }}<br>
+
+        {% if customer.default_address.address2 != "" %}
+          {{ customer.default_address.address2 }}<br>
+        {% endif %}
+
+        {% if customer.default_address.city != "" %}
+          {{ customer.default_address.city }}
+        {% endif %}
+
+        {% if customer.default_address.province_code != "" %}
+          {{ customer.default_address.province_code | upcase }}
+        {% endif %}
+
+        {% if customer.default_address.zip != "" %}
+          {{ customer.default_address.zip | upcase }}<br>
+        {% endif %}
+
+        {% if customer.default_address.country != "" %}
+          {{ customer.default_address.country }}<br>
+        {% endif %}
+
+        {% if customer.default_address.phone != "" %}
+          {{ customer.default_address.phone }}
+        {% endif %}
+        </p>
+      {% endif %}
+
+      <p><a class="account-addresses" href="/account/addresses">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a></p>
+    </div>
+  </div>
+
+</div>
+{% endpaginate %}

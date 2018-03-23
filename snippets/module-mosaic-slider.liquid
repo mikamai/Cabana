@@ -1,0 +1,16 @@
+<div class="mosaic-block block feature s1 mosaic-slider">
+    {% assign collection = collections[collectionName] %}
+    {% for product in collection.products limit:3    %}
+        <div class="mosaic-slide">
+            <span class="mosaic-block-image" title="{{ product.featured_image.alt }}" data-bg-src="{{ product.featured_image | img_url: '1024x' }}"></span>
+        </div>
+    {% endfor %}
+    <div class="mosaic-block-inner">
+        <a href="{{ collection.url }}" class="mosaic-block-inner bg-transparent"></a>
+        <div class="content">
+            <h1>{{ collection.title }}</h1>
+            <p>{{ collection.description | truncatewords: 70 | strip_html | strip }}</p>
+            <div><span href="{{ collection.url }}" class="button">{{ 'collections.grid.shop_all' | t }} {{ collection.title }}</span></div>
+        </div>
+    </div>
+</div>

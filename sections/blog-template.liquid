@@ -1,0 +1,96 @@
+{% comment %} Settings {% endcomment %}
+{% assign showRSS = section.settings.show_rss %}
+{% assign showComments = section.settings.show_comments %}
+
+<div data-section-id="{{ section.id }}" data-section-type="blog-template">
+  <section class="page-title container-wrap">
+    <div class="container">
+      <div class="row row-lg inline u-center">
+        <h1 class="blog-title">{{ blog.title }}
+          {% if showRSS %}
+            <div class="blog-rss">
+              <a class="icon-rss" href="{{blog.title}}.atom" target="_blank"><span>{{ 'blog.blog_list_view.follow' | t }}</span></a>
+            </div>
+          {% endif %}
+        </h1>
+        {% if current_tags %}
+          <h4 class="tag-label">{{ 'blog.blog_list_view.posts_tagged' | t }}: {{ current_tags.first }}</h4>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+  <div class="container-wrap blog-listing">
+    <div class="row row-sm">
+      {% paginate blog.articles by 5 %}
+        {% for article in blog.articles %}
+          <div class="article">
+            {% if article.image %}
+              <div class="article-image" data-bg-src="{{ article | img_url: '2048x' }}">
+                <a href="{{ article.url }}" title="{{article.title}}"></a>
+              </div>
+            {% endif %}
+            <h2 class="title">
+              <a href="{{ article.url }}">{{ article.title }}</a>
+            </h2>
+            <h3 class="details">
+              by {{article.author}} | <time pubdate datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time>
+              {% if article.comments_count > 0 and showComments %}
+                &nbsp;|&nbsp;<span class="comment-count"><em>{{ 'blog.blog_list_view.comment_count' | t: count: article.comments_count }}</em></span>
+              {% endif %}
+            </h3>
+            <p>{{article.excerpt_or_content | truncatewords: 60 | strip_html | strip }}</p>
+            <p class="read-link"><a href="{{ article.url }}">{{ 'blog.blog_list_view.view_article' | t }}</a></p>
+            {% if article.tags.size > 0 %}
+              <div class="article-footer">
+                <p class="tags">
+                  {{ 'blog.blog_list_view.tags_label' | t }}:
+                  {% for tag in article.tags %} 
+                  <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}
+                  {% endfor %}
+                </p>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+        {% if current_tags %}
+          <p class="back-to-all">{{ 'blog.blog_list_view.back_to' | t | link_to: blog.url }}</p>
+        {% endif %}
+        {% if paginate.next.is_link or paginate.previous.is_link %}
+          <p class="prev-next"> 
+            {% if paginate.next.is_link %}
+              <span class="__next">{{ 'blog.blog_list_view.older_articles' | t | link_to: paginate.next.url }}</span>
+            {% endif %}
+            {% if paginate.previous.is_link %}
+              <span class="__prev">{{ 'blog.blog_list_view.newer_articles' | t | link_to: paginate.previous.url }}</span>
+            {% endif %}
+          </p>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+    {% if blog.articles_count == 0 %}
+    <div class="collection-error centered">
+      <div class="no-products h4">{{ 'blog.blog_list_view.no_article' | t }}</div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+  {
+      "name": "Blog pages",
+      "settings": [ {
+          "type": "header",
+          "content": "Content"
+      }, {
+          "type": "checkbox",
+          "id": "show_rss",
+          "label": "Show RSS follow links",
+          "default": true
+      }, {
+          "type": "checkbox",
+          "id": "show_comments",
+          "label": "Show comment count",
+          "default": true
+      } ]
+  }
+{% endschema %}

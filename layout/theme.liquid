@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie9 no-js"><![endif]-->
+<!--[if IE 8 ]><html class="ie8 no-js"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if IE]><!--><html class="ie"><!--<![endif]-->
+
+<head>
+  <meta charset="utf-8" />
+
+  {% if settings.favicon != blank %}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  {% endif %}
+  
+  <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' /><![endif]-->
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  {% include 'site-social-meta' %}
+
+  {% if settings.general_font contains '%Google%' or settings.header_font contains '%Google%' %}
+    {% assign url_root = '//fonts.googleapis.com/css?family=' %}
+    {% if settings.general_font contains '%Google%' %}
+      {% assign general_font = settings.general_font | replace: '%Google%','' %}
+    {% endif %}
+    {% if settings.header_font contains '%Google%' %}
+      {% assign header_font = settings.header_font | replace: '%Google%','' %}
+    {% endif %}
+    {% capture google_fonts %}{{url_root}}{% if general_font %}{{ general_font }}:400,500,700|{% endif %}{% if header_font %}{{ header_font }}:400,500,600,700|{% endif %}{% endcapture %}
+    <link href='{{google_fonts}}' rel='stylesheet' type='text/css'>
+  {% endif %}
+
+  {{ 'style.scss.css' | asset_url | stylesheet_tag }}
+
+  <!-- SCRIPTS -->
+  <!--[if lt IE 9]>{{ '//html5shiv.googlecode.com/svn/trunk/html5.js' | script_tag }}<![endif]-->
+  {{ 'modernizr.min.js'  | asset_url | script_tag }}
+  {{ 'respond.min.js'  | asset_url | script_tag }}
+  {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {% if template contains 'customers' %}
+    {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+  {% endif %}
+  <!-- JQUERY -->
+  {{ 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js' | script_tag }}
+  <!-- jQuery Dependent -->
+  {{ 'api.jquery.js' | shopify_asset_url | script_tag }}
+  {{ 'handlebars.min.js' | asset_url | script_tag }}
+  {{ 'valencia.js'  | asset_url | script_tag }}
+
+  {{ content_for_header  }}
+
+  <title>
+  {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+</head>
+
+{% capture body_class %}{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} image-hover-light cta-fill-{{settings.cta_button_style}}{% endcapture %}
+
+<body id="{{ page_title | handle }}" class="{{ body_class }}" >
+
+  {% section 'top-bar' %}
+
+  <div class="pageWrap">
+
+  {% section 'header' %}
+
+  <div class="bodyWrap">
+
+    {{ content_for_layout }}
+
+    {% section 'footer' %}
+
+  </div> <!-- END bodyWrap -->
+  </div> <!-- END pageWrap -->
+
+  <!-- AJAX Mustache Templates -->
+  {% include 'ajax-cart' %}
+  {% include 'cart-popover' %}
+
+  {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+  {{ 'shop.js'  | asset_url | script_tag }}
+  {% include 'load-spinner' %}
+  {% comment %}{% include 'search-autocomplete' %}{% endcomment %}
+  <script>Shopify.money_format = "{{ shop.money_format }}";</script>
+</body>
+</html>

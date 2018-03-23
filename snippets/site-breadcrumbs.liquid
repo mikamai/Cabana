@@ -1,0 +1,40 @@
+
+
+<a href="/" title="Back to the Homepage">{{'collections.breadcrumbs.home' | t}}</a>
+
+{% if template contains 'collection' %}
+
+  <span class="breadcrumbs-sep">›</span> 
+  {{ 'collections.breadcrumbs.collections' | t | link_to: '/collections'}}
+  <span class="breadcrumbs-sep">›</span> 
+
+  {% if collection.handle %}
+    {% if collection.handle == 'all' %}
+      {{ 'collections.breadcrumbs.default_collection' | t }}
+    {% else %}
+      {{ collection.title }}
+    {% endif %}
+  {% endif %}
+
+{% endif %}
+
+{% if template contains 'product' %}
+
+  <span class="breadcrumbs-sep">›</span> 
+  {% capture page_url %}/collections/all{% endcapture %}
+  {{ 'collections.breadcrumbs.products' | t | link_to: page_url}}
+  <span class="breadcrumbs-sep">›</span> 
+
+  {% if collection %}             
+    {% if collection.handle %}
+       {% capture url %}/collections/{{ collection.handle }}{% endcapture %}
+       {{ collection.title | link_to: url }}
+    {% endif %}
+    <span class="breadcrumbs-sep">›</span>
+  {% endif %}
+
+  {% if product.handle %}
+       <span>{{ product.title }}</span>
+  {% endif %}
+
+{% endif %}

@@ -1,0 +1,590 @@
+[
+	{
+		"name": "theme_info",
+		"theme_name": "Modular",
+		"theme_author": "Page Mill Design",
+		"theme_version": "1.0.2",
+		"theme_support_email": "support@pagemilldesign.com",
+		"theme_documentation_url": "http://pagemilldesign.com/modular-documentation"
+	},
+	{
+		"name": "Colors",
+		"settings": [
+			{
+				"type": "header",
+				"content": "General"
+			},
+			{
+				"type": "color",
+				"id": "color_heading_new",
+				"label": "Headings",
+				"default": "#000000"
+			},
+			{
+				"type": "color",
+				"id": "color_text_new",
+				"label": "Text",
+				"default": "#000000"
+			},
+			{
+				"type": "color",
+				"id": "color_primary_new",
+				"label": "Primary",
+				"default": "#FFFFFF"
+			},
+			{
+				"type": "color",
+				"id": "color_secondary_new",
+				"label": "Secondary",
+				"default": "#222222"
+			},
+			{
+				"type": "color",
+				"id": "color_button_bg",
+				"label": "Button background"
+			},
+			{
+				"type": "color",
+				"id": "color_button_text",
+				"label": "Button text",
+				"default": "#ffffff"
+			},
+			{
+				"type": "color",
+				"id": "color_top_bar",
+				"label": "Top bar",
+				"default": "#fafafa"
+			},
+			{
+				"type": "color",
+				"id": "color_border_new",
+				"label": "Borders",
+				"default": "#CCCCCC"
+			},
+			{
+				"type": "color",
+				"id": "color_background_new",
+				"label": "Background",
+				"default": "#FFFFFF"
+			},
+			{
+				"type": "header",
+				"content": "Header icons",
+				"info": "Menu and cart icons"
+			},
+			{
+				"type": "color",
+				"id": "header_icon_color",
+				"label": "Color",
+				"default": "#222222"
+			},
+			{
+				"type": "color",
+				"id": "header_bg_color",
+				"label": "Background",
+				"default": "#f4f4f4"
+			},
+			{
+				"type": "header",
+				"content": "Drawer"
+			},
+			{
+				"type": "color",
+				"id": "drawer_bg_color",
+				"label": "Background",
+				"default": "#fff"
+			},
+			{
+				"type": "color",
+				"id": "drawer_text_color",
+				"label": "Text",
+				"default": "#000"
+			}
+		]
+	},
+	{
+		"name": "Typography",
+		"settings": [
+			{
+				"type": "header",
+				"content": "Headings"
+			},
+			{
+				"type": "select",
+				"id": "header_font",
+				"label": "Font",
+				"options": [
+					{
+						"value": "%Google%Work+Sans",
+						"label": "Work Sans",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Open+Sans",
+						"label": "Open Sans",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Droid+Sans",
+						"label": "Droid Sans",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Lato",
+						"label": "Lato",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Raleway",
+						"label": "Raleway",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Ubuntu",
+						"label": "Ubuntu",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Josefin+Sans",
+						"label": "Josefin Sans",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Montserrat",
+						"label": "Montserrat",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Ubuntu+Condensed",
+						"label": "Ubuntu Condensed",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Oswald",
+						"label": "Oswald",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Bitter",
+						"label": "Bitter",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Droid+Serif",
+						"label": "Droid Serif",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Merriweather",
+						"label": "Merriweather",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Copse",
+						"label": "Copse",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Playfair+Display",
+						"label": "Playfair Display",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Goudy+Bookletter+1911",
+						"label": "Goudy Bookletter 1911",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Roboto+Slab",
+						"label": "Roboto Slab",
+						"group": "Slab-serif"
+					},
+					{
+						"value": "%Google%Arvo",
+						"label": "Arvo",
+						"group": "Slab-serif"
+					},
+					{
+						"value": "%Google%Graduate",
+						"label": "Graduate",
+						"group": "Slab-serif"
+					},
+					{
+						"value": "%Google%Josefin+Slab",
+						"label": "Josefin Slab",
+						"group": "Slab-serif"
+					},
+					{
+						"value": "Helvetica, Arial, sans-serif",
+						"label": "Helvetica/Arial",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "Impact, Charcoal, Helvetica, Arial, sans-serif",
+						"label": "Impact",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Lucida, Helvetica, Arial, sans-serif",
+						"label": "Lucida Grande",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "Verdana, Helvetica, Arial, sans-serif",
+						"label": "Verdana",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "Garamond, Baskerville, Caslon, serif",
+						"label": "Garamond",
+						"group": "Serif"
+					},
+					{
+						"value": "Georgia, Utopia, 'Times New Roman', Times, serif",
+						"label": "Georgia",
+						"group": "Serif"
+					},
+					{
+						"value": "Palatino, 'Palatino Linotype', 'Book Antiqua', serif",
+						"label": "Palatino",
+						"group": "Serif"
+					},
+					{
+						"value": "'Times New Roman', Times, serif",
+						"label": "Times New Roman",
+						"group": "Serif"
+					},
+					{
+						"value": "'Courier New', Courier, monospace",
+						"label": "Courier New",
+						"group": "Monospace"
+					},
+					{
+						"value": "Monaco, 'Lucida Console', 'DejaVu Sans Mono', monospace",
+						"label": "Monaco/Lucida Console",
+						"group": "Monospace"
+					}
+				]
+			},
+			{
+				"type": "range",
+				"id": "base_font_size",
+				"label": "Base size",
+				"info": "Adjusting the base size will adjust all headings based on a predefined scale.",
+				"min": 12,
+				"max": 18,
+				"step": 1,
+				"unit": "px",
+				"default": 15
+			},
+			{
+				"type": "range",
+				"id": "heading_letter_spacing",
+				"label": "Letter spacing",
+				"min": 0,
+				"max": 2,
+				"step": 0.5,
+				"unit": "px",
+				"default": 0
+			},
+			{
+				"type": "header",
+				"content": "Body text"
+			},
+			{
+				"type": "select",
+				"id": "general_font",
+				"label": "Font",
+				"options": [
+					{
+						"value": "%Google%Work+Sans",
+						"label": "Work Sans",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Open+Sans",
+						"label": "Open Sans",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Droid+Sans",
+						"label": "Droid Sans",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Lato",
+						"label": "Lato",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Raleway",
+						"label": "Raleway",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Ubuntu",
+						"label": "Ubuntu",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Josefin+Sans",
+						"label": "Josefin Sans",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Montserrat",
+						"label": "Montserrat",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Ubuntu+Condensed",
+						"label": "Ubuntu Condensed",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Oswald",
+						"label": "Oswald",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "%Google%Bitter",
+						"label": "Bitter",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Droid+Serif",
+						"label": "Droid Serif",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Merriweather",
+						"label": "Merriweather",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Copse",
+						"label": "Copse",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Playfair+Display",
+						"label": "Playfair Display",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Goudy+Bookletter+1911",
+						"label": "Goudy Bookletter 1911",
+						"group": "Serif"
+					},
+					{
+						"value": "%Google%Roboto+Slab",
+						"label": "Roboto Slab",
+						"group": "Slab-serif"
+					},
+					{
+						"value": "%Google%Arvo",
+						"label": "Arvo",
+						"group": "Slab-serif"
+					},
+					{
+						"value": "%Google%Graduate",
+						"label": "Graduate",
+						"group": "Slab-serif"
+					},
+					{
+						"value": "%Google%Josefin+Slab",
+						"label": "Josefin Slab",
+						"group": "Slab-serif"
+					},
+					{
+						"value": "Helvetica, Arial, sans-serif",
+						"label": "Helvetica/Arial",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "Impact, Charcoal, Helvetica, Arial, sans-serif",
+						"label": "Impact",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Lucida, Helvetica, Arial, sans-serif",
+						"label": "Lucida Grande",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "Verdana, Helvetica, Arial, sans-serif",
+						"label": "Verdana",
+						"group": "Sans-serif"
+					},
+					{
+						"value": "Garamond, Baskerville, Caslon, serif",
+						"label": "Garamond",
+						"group": "Serif"
+					},
+					{
+						"value": "Georgia, Utopia, 'Times New Roman', Times, serif",
+						"label": "Georgia",
+						"group": "Serif"
+					},
+					{
+						"value": "Palatino, 'Palatino Linotype', 'Book Antiqua', serif",
+						"label": "Palatino",
+						"group": "Serif"
+					},
+					{
+						"value": "'Times New Roman', Times, serif",
+						"label": "Times New Roman",
+						"group": "Serif"
+					},
+					{
+						"value": "'Courier New', Courier, monospace",
+						"label": "Courier New",
+						"group": "Monospace"
+					},
+					{
+						"value": "Monaco, 'Lucida Console', 'DejaVu Sans Mono', monospace",
+						"label": "Monaco/Lucida Console",
+						"group": "Monospace"
+					}
+				]
+			},
+			{
+				"type": "range",
+				"id": "body_font_size",
+				"label": "Base size",
+				"info": "Adjusting the base size will adjust all body text based on a predefined scale.",
+				"min": 12,
+				"max": 18,
+				"step": 1,
+				"unit": "px",
+				"default": 15
+			},
+			{
+				"type": "range",
+				"id": "body_letter_spacing",
+				"label": "Letter spacing",
+				"min": 0,
+				"max": 2,
+				"step": 0.5,
+				"unit": "px",
+				"default": 0
+			}
+		]
+	},
+	{
+		"name": "Cart page",
+		"settings": [
+			{
+				"type": "checkbox",
+				"id": "enable_cart_order_notes",
+				"label": "Show cart notes",
+				"default": false
+			}
+		]
+	},
+	{
+		"name": "Breadcrumbs",
+		"settings": [
+			{
+				"type": "checkbox",
+				"id": "show_breadcrumbs",
+				"label": "Show breadcrumbs",
+				"info": "Breadcrumbs, located on the Collection and Product pages, help users navigate through your products.",
+				"default": true
+			}
+		]
+	},
+	{
+		"name": "Favicon",
+		"settings": [
+			{
+				"type": "image_picker",
+				"id": "favicon",
+				"label": "Favicon",
+				"info": "32 x 32px .png required"
+			}
+		]
+	},
+	{
+		"name": "Social media",
+		"settings": [
+			{
+				"type": "text",
+				"id": "twitter_url",
+				"label": "Twitter",
+				"info": "http://twitter.com/shopify"
+			},
+			{
+				"type": "text",
+				"id": "facebook_url",
+				"label": "Facebook",
+				"info": "http://facebook.com/shopify"
+			},
+			{
+				"type": "text",
+				"id": "pinterest_url",
+				"label": "Pinterest",
+				"info": "http://pinterest.com/shopify"
+			},
+			{
+				"type": "text",
+				"id": "googleplus_url",
+				"label": "Google+",
+				"info": "http://google.com/+shopify"
+			},
+			{
+				"type": "text",
+				"id": "instagram_url",
+				"label": "Instagram",
+				"info": "http://instagram.com/shopify"
+			},
+			{
+				"type": "text",
+				"id": "tumblr_url",
+				"label": "Tumblr",
+				"info": "http://shopify.tumblr.com"
+			},
+			{
+				"type": "text",
+				"id": "youtube_url",
+				"label": "Youtube",
+				"info": "http://youtube.com/user/shopify"
+			},
+			{
+				"type": "text",
+				"id": "rss_url",
+				"label": "RSS Blog Feed",
+				"info": "http://store.myshopify.com/blogs/news.atom"
+			},
+			{
+				"type": "header",
+				"content": "Sharing Options",
+				"info": "Sharing is only available on Product and Article pages"
+			},
+			{
+				"type": "checkbox",
+				"id": "share_on_twitter",
+				"label": "Share on Twitter",
+				"default": true
+			},
+			{
+				"type": "checkbox",
+				"id": "share_on_facebook",
+				"label": "Share on Facebook",
+				"default": true
+			},
+			{
+				"type": "checkbox",
+				"id": "share_on_googleplus",
+				"label": "Share on Google+",
+				"default": true
+			},
+			{
+				"type": "checkbox",
+				"id": "share_on_pinterest",
+				"label": "Share on Pinterest",
+				"default": true
+			}
+		]
+	}
+]

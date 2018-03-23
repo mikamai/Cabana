@@ -1,0 +1,42 @@
+{% comment %}
+  Default number of columns is 4, so we're only checking for the 3 column option.
+{% endcomment %}
+{% if settings.collection_collectionGrid_columns == "3" %}
+  {% assign threeCol = true %}
+{% endif %}
+
+{% paginate collections by 12 %}
+<section class="page-title container-wrap">
+  <div class="container">
+    <div class="row row-lg inline u-center">
+      <h1>{{ 'collections.listing_page.title' | t }}</h1>
+    </div>
+  </div>
+</section>
+
+<ul class="grid clearfix">
+
+  <section class="collectionGrid container-wrap">
+    <div class="container">
+
+      <div class="js-collectionGrid collectionGrid-row row inline row-lg{{featured}}">
+
+        {% for collection in collections %}
+          {% include 'collection-grid-item' with 'three-per-row' %}
+        {% endfor %}
+
+        <div class="gridSpacer item block s1 sm_s12 lg_s13{% if threeCol == true %} xl_s13{% else %} xl_s14{% endif %}"></div>
+        <div class="gridSpacer item block s1 sm_s12 lg_s13{% if threeCol == true %} xl_s13{% else %} xl_s14{% endif %}"></div>
+
+      </div>
+
+      {% if paginate.next %}
+        <div class="row row-lg inline u-center">
+          <a class="js-loadMore loadMore button" href="{{ paginate.next.url }}">{{ 'collections.pagination.load_more' | t }}</a>
+        </div>
+      {% endif %}
+
+    </div>
+  </section>
+</ul>
+{% endpaginate %}

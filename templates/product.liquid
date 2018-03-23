@@ -1,0 +1,67 @@
+{% include 'product-variantPopover' %}
+
+<div class="mobile-zoom-overlay"><span class="js-MobileZoom-close mobile-zoom-close"><i class="icon-close"></i></span></div>
+
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+  {% assign on_sale = true %}
+  {% assign on_sale_class = ' is-sale' %}
+{% endif %}
+
+{% assign sold_out = true %}
+{% if product.available %}
+  {% assign sold_out = false %}
+{% endif %}
+
+<div itemscope itemtype="http://schema.org/Product">
+<meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+<meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
+
+{% section 'product-template' %}
+
+<script type="text/javascript">
+  var selectCallback = function(variant, selector) {
+    Product.callback({
+      money_format: "{{ shop.money_format | replace: 'money', '\"money\"' }}",
+      variant: variant,
+      selector: selector
+    });
+  };
+
+  jQuery(function($) {
+    new Shopify.OptionSelectors('product-select', {
+      product: {{product | json}},
+      onVariantSelected: selectCallback
+    });
+
+    manageOptions();
+
+    function manageOptions(){
+      var obj = {{product | json}};
+
+      /*
+       * option_selection.js doesn't add a label if there's only one option,
+       * so this logic:
+       * * adds a label (and arrow) if there's only one option and multiple variants
+       * * prepends the arrow if there are more than on option (this is a normal successful call to option_selection.js)
+       * * hides the select element and wrapper if there is only one variant
+       *
+       * This code is reused here from Site.quickView.selectOptions() in shop.js. Slightly edited: ['name'] is not
+       * needed here because Shopify produces two different JSON objects depending on how you call it i.e. AJAX vc {{product | json}}
+       */
+      if (obj['options'].length === 1 && obj['variants'].length > 1){
+        for (i = 0; i < obj['options'].length; i++) {
+          $('#product-select-option-'+[i]).closest('.selector-wrapper').prepend('<span class="selectArrow"></span><label>'+obj['options'][0]+'</label>');
+        }
+      } else if (obj['options'].length > 1){
+        for (i = 0; i < obj['options'].length; i++) {
+          $('#product-select-option-'+[i]).closest('.selector-wrapper').prepend('<span class="selectArrow"></span>');
+        }
+      } else if (obj['options'].length === 1 && obj['variants'].length === 1){
+        $('#product-select-option-0').closest('.productForm-block').hide(); // hide wrapper
+      }
+    }
+  });
+</script>
+
+{{ 'page-product.js'  | asset_url | script_tag }}

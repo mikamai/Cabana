@@ -1,0 +1,33 @@
+{% if template contains 'article' or template contains 'blog' %}
+  {% capture permalinkURL %}{{ shop.url }}{{ article.url }}{% endcapture %}
+  {% capture shareTitle %}{{ article.title | append: ' - ' | append: shop.name | url_param_escape }}{% endcapture %}
+  {% if article.image %}
+    {% assign src = article.image | img_url: 'master' %}
+  {% else %}
+    {% assign img_tag = '<' | append: 'img' %}
+    {% if article.content contains img_tag %}
+      {% assign src = article.content | split: 'src="' %}
+      {% assign src = src[1] | split: '"' | first %}
+      {% assign src = src | replace: '_small', '' | replace: '_compact', '' | replace: '_medium', '' | replace: '_large', '' | replace: '_grande', '' %}
+    {% endif %}
+  {% endif %}
+{% elsif template contains 'product' %}
+  {% capture permalinkURL %}{{ shop.url }}{{ product.url }}{% endcapture %}
+  {% capture shareTitle %}{{ product.title | append: ' - ' | append: shop.name | url_param_escape }}{% endcapture %}
+  {% assign src = product.featured_image | img_url: 'master' %}
+{% endif %}
+
+{% capture twitterShareURL %}//twitter.com/intent/tweet?text={{ shareTitle }}&amp;url={{ permalinkURL }}{% if settings.twitter_via != '' %}&amp;via={{ settings.twitter_via | replace: '@','' }}{% endif %}{% endcapture %}
+
+{% if settings.share_on_twitter %}
+  <a target="_blank" href="{{ twitterShareURL }}" class="share-link icon-twitter" data-network="twitter"></a>
+{% endif %}
+{% if settings.share_on_facebook %}
+  <a target="_blank" href="//www.facebook.com/sharer.php?u={{ permalinkURL }}" class="share-link icon-facebook" data-network="facebook"></a>
+{% endif %}
+{% if settings.share_on_googleplus %}
+  <a target="_blank" href="//plus.google.com/share?url={{ permalinkURL }}" class="share-link icon-googleplus" data-network="googleplus"></a>
+{% endif %}
+{% if settings.share_on_pinterest %}
+  <a target="_blank" href="//pinterest.com/pin/create/button/?description={{ shareTitle }}&amp;url={{ permalinkURL }}&amp;media={{ src }}" class="share-link icon-pinterest" data-network="pinterest"></a>
+{% endif %}

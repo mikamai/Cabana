@@ -1,0 +1,215 @@
+{% comment %} Settings {% endcomment %}
+{% assign showNavDots = section.settings.showNavDots %}
+{% assign showNavArrows = section.settings.showNavArrows %}
+{% assign mode = section.settings.mode %}
+{% assign autoplay = section.settings.autoplay %}
+{% assign duration = section.settings.duration | times:1000 %}
+{% assign hover = true %}
+{% assign speed = 400 %}
+
+{% assign custom = section.settings.custom %}
+{% assign customTitle = section.settings.title %}
+{% assign customContent = section.settings.content | truncatewords: 70 %}
+{% assign customCTA = section.settings.cta %}
+{% assign customLink = section.settings.link %}
+
+<style>
+.gallery-wrap.style-nav-text .slick-next:after, .gallery-wrap.style-nav-text .slick-prev:after {
+    color:{{section.settings.color_style}};
+}
+.gallery-wrap.style-nav-text .slick-dots li.slick-active {background-color: {{section.settings.color_style}};}
+.gallery-wrap.style-nav-text .slick-dots li {border-color: {{section.settings.color_style}};}
+</style>
+
+{% comment %} Section {% endcomment %}
+<section class="gallery-wrap container-wrap style-default style-nav-text" id="gallery-module-{{ section.id }}" data-section-type="gallery">
+    <div class="gallery {% if section.settings.show_margins %}gallery--margins{% endif %}">
+        <div class="row {{ section.settings.slide_height }}">
+            <div class="gallery-slider js-slider block s1 med_s35" data-slick="{ 'arrows':{{ showNavArrows }}, 'dots':{{ showNavDots }}, 'autoplay':{{ autoplay }}, 'autoplaySpeed':{{ duration }}, 'speed':{{ speed }}, 'pauseOnHover':{{ hover }}, 'fade':{{ mode }} }">
+                    {% for block in section.blocks %}
+                        {% if block.settings.slide %}
+                            <div class="js-slide" data-bg-src="{{ block.settings.slide | img_url: 'master' }}" {{ block.shopify_attributes }} data-block="slide"></div>
+                        {% else %}
+                            <div class="js-slide slide-placeholder" {{ block.shopify_attributes }} data-block="slide">
+                                {{ 'image' | placeholder_svg_tag }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+            </div>
+            {% if customTitle != blank or customContent != blank or customCTA != blank %}
+            <div class="gallery-content block s1 med_s25">
+                <div class="gallery-content-inner">
+                        {% if customTitle != blank %}
+                            <h1 class="bold">{{ customTitle }}</h1>
+                        {% endif %}
+
+                        {% if customContent != blank %}
+                            {{ customContent }}
+                        {% endif %}
+
+                        {% if customCTA != blank %}
+                            <a {% if customLink != blank %}href="{{ customLink }}"{% endif %} class="button">{{ customCTA }}</a>
+                        {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+<style>
+.slick-prev, .slick-next {background: none !important;}
+</style>
+{% comment %} Schema {% endcomment %}
+{% schema %}
+{
+  "name": "Gallery",
+  "max_blocks": 6,
+  "class": "header--full",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slideshow"
+    },
+    {
+      "type": "checkbox",
+      "id": "showNavDots",
+      "label": "Show navigation dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "showNavArrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mode",
+      "label": "Use fade transition",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay slideshow",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "duration",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "unit": "sec",
+      "label": "Change slides every",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "color_style",
+      "label": "Arrow and dots color",
+      "default": "black",
+      "options": [
+        {
+          "value": "white",
+          "label": "Light"
+        },
+        {
+          "value": "black",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_margins",
+      "label": "Show margins",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "slide_height",
+      "label": "Slide height",
+      "default": "five-fifty-height-hero",
+      "options": [
+        {
+          "value": "one-hundred-height-hero",
+          "label": "Full screen height"
+        },
+        {
+          "value": "seven-fifty-height-hero",
+          "label": "750px"
+        },
+        {
+          "value": "sixty-fifty-height-hero",
+          "label": "650px"
+        },
+        {
+          "value": "five-fifty-height-hero",
+          "label": "550px"
+        },
+        {
+          "value": "four-fifty-height-hero",
+          "label": "450px"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Tell a Story"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>By showcasing a product, collection, or your brand.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta",
+      "label": "Button"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gallery_image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "slide",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Image",
+      "name": "Gallery",
+      "blocks": [
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

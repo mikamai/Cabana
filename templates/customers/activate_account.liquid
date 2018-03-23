@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row row-lg inline u-center">
+    <div class="block s1 lg_s12">
+
+      <h1 class="u-center">{{ 'customer.activate_account.title' | t }}</h1>
+      <p class="u-center c-accent">{{ 'customer.activate_account.subtext' | t }}</p>
+
+      {% comment %}
+        This form must use 'activate_customer_password'
+      {% endcomment %}
+      <div class="account-form">
+        {% form 'activate_customer_password' %}
+          <div class="row inline">
+            <div class="h4">
+              {{ form.errors | default_errors }}
+            </div>
+
+            <div class="inputGroup block s1 med_s12">
+              <label for="CustomerPassword" class="h4 c-gray">{{ 'customer.activate_account.password' | t }}</label>
+              <input type="password" value="" name="customer[password]" id="CustomerPassword" class="h4">
+            </div>
+
+            <div class="inputGroup block s1 med_s12">
+              <label for="CustomerPasswordConfirmation" class="h4 c-gray">{{ 'customer.activate_account.password_confirm' | t }}</label>
+              <input type="password" value="" name="customer[password_confirmation]" id="CustomerPasswordConfirmation" class="h4">
+            </div>
+          </div>
+          <div class="row inline u-center">
+            <input type="submit" class="button block" value="{{ 'customer.activate_account.submit' | t }}">
+            <input type="submit" class="button alt block" name="decline" value="{{ 'customer.activate_account.cancel' | t }}">
+          </div>
+        {% endform %}
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+{% if section.settings.text != blank %}
+{% assign top_bar_status = "visible" %}
+{% else %}
+{% assign top_bar_status = "not_visible" %}
+{% endif %}
+
+<div data-section-id="{{ section.id }}" data-section-type="top-bar" class="js-siteAlert siteAlert container-wrap" data-status="{{ top_bar_status }}">
+{% if top_bar_status == 'visible' %}
+	<div class="container u-center">
+			<div class="row row-lg u-center">
+				<div class="block u-center">
+					<span class="alert-title h4">{{ section.settings.text }}</span>
+				</div>
+			</div>
+	</div>
+	<div class="js-alert-close alert-close icon-close"></div>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Top bar",
+    "class":"top-bar-section",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text",
+        "default":"<p>Broadcast sales, promos, or other offerings here</p>"
+      }
+    ]
+  }
+{% endschema %}

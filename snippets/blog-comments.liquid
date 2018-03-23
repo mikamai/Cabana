@@ -1,0 +1,78 @@
+{% if blog.comments_enabled? %}
+  <div id="comments">
+
+    {% comment %}If a comment was just submitted with no blank field.{% endcomment %}
+    {% if comment and comment.created_at %}
+    <p class="success feedback">
+      {% if blog.moderated? %}
+      {{ 'blog.article.comment_post_notification' | t }}
+      {% else %}
+      {{ 'blog.article.comment_post_success' | t }}
+      {% endif %}
+    </p>
+    {% endif %}
+
+    {% if number_of_comments > 0 %}
+    <ul>
+      {% comment %}If a comment was just submitted with no blank field, let's show it.{% endcomment %}
+      {% if comment and comment.created_at and comment.status=="published" %}
+      <li id="{{ comment.id }}" class="comment first{% if article.comments_count == 0 %} last{% endif %}">
+        <h3 class="comment-author">{{ comment.author }} {{ 'blog.article.comment_date_on' | t }} {{ comment.created_at | date: "%B %d, %Y" }}</h3>
+        <div class="comment-content">
+          {{ comment.content }}
+        </div>
+      </li>
+      {% endif %}
+      {% comment %}Showing the rest of the comments.{% endcomment %}
+      {% for article_comment in article.comments %}
+        {% if article_comment != comment %}
+          <li id="{{ comment.id }}" class="comment{% unless number_of_comments > article.comments_count %}{% if forloop.first %} first{% endif %}{% endunless %}{% if forloop.last %} last {% endif %}">
+            <h3 class="comment-author">{{ article_comment.author }} {{ 'blog.article.comment_date_on' | t }} {{ article_comment.created_at | date: "%B %d, %Y" }}</h3>
+            <div class="comment-content">
+              {{ article_comment.content }}
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+    
+    {% comment %}Comments are paginated.{% endcomment %}
+    {% if paginate.pages > 1 %}
+    <div id="pagination" class="blog-pagination p">
+      {{ paginate | default_pagination }}
+    </div>
+    {% endif %}
+    
+    {% comment %}Comment submission form.{% endcomment %}
+    {% form "new_comment", article %}
+    
+    <h3 id="add-comment-title">{{ 'blog.article.comment_post_title' | t }}</h3>
+    
+    {% if form.errors %}
+    <div class="feedback error p">
+    {{ form.errors | default_errors }}
+    </div>
+    {% endif %}
+
+    <p>
+      <label for="comment-author">{{ 'blog.article.comment_author' | t }}</label>
+      <input required{% if form.errors contains "author" %} class="error"{% endif %} type="text" name="comment[author]" id="comment-author" value="{{ form.author }}" />
+    </p>
+
+    <p>
+      <label for="comment-email">{{ 'blog.article.comment_email' | t }}</label>
+      <input required{% if form.errors contains "email" %} class="error"{% endif %} type="email" name="comment[email]" id="comment-email" value="{{ form.email }}" />
+    </p>
+
+    <p>
+      <label for="comment-body">{{ 'blog.article.comment_message' | t }}</label>
+      <textarea required{% if form.errors contains "body" %} class="error"{% endif %} name="comment[body]" id="comment-body">{{ form.body }}</textarea>
+    </p>
+
+    <input type="submit" class="button" value="{{ 'blog.article.comment_post_button_title' | t }}" /> 
+    
+    {% endform %}
+    
+  </div>
+{% endif %}

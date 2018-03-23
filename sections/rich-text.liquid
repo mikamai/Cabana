@@ -1,0 +1,59 @@
+{% comment %} Settings {% endcomment %}
+{% assign title = section.settings.title %}
+{% assign content = section.settings.content %}
+{% assign cta = section.settings.cta %}
+{% assign link = section.settings.link %}
+
+{% comment %} Section {% endcomment %}
+<section class="title-module container-wrap" id="text-module-{{ section.id }}" data-section-type="rich-text">
+    <div class="container">
+        <div class="row row-sm">
+
+            {% if title != blank %}
+                <h4 class="bold">{{ title }}</h4>
+            {% endif %}
+
+            {% if content != blank %}
+                <div class="rich-content">{{ content }}</div>
+            {% endif %}
+
+            {% if cta != blank %}
+                {% if link == blank %}
+                    <a class="button">{{ cta }}</a>
+                {% else %}
+                    <a href="{{ link }}" class="button" title="{{ cta }}">{{ cta }}</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% comment %} Schema {% endcomment %}
+{% schema %}
+    {
+        "name": "Rich text",
+        "settings": [ {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default":"Describe your products or brand in detail here"
+        }, {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content",
+            "default":"<p>Modular is a powerful Shopify theme that will set you apart from the rest. It features ample space to showcase your imagery with Mosaic, Gallery, and Slideshow sections.</p>"
+        }, {
+            "type": "text",
+            "id": "cta",
+            "label": "Button"
+        }, {
+            "type": "url",
+            "id": "link",
+            "label": "Button URL"
+        } ],
+        "presets": [ {
+            "category": "Text",
+            "name": "Rich text"
+        } ]
+    }
+{% endschema %}

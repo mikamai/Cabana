@@ -1,0 +1,265 @@
+{% comment %} Settings {% endcomment %}
+{% assign zoom = section.settings.product_zoom_enabled %}
+{% assign arrows = section.settings.product_slideshow_arrows %}
+{% assign layout = 4 %}
+{% assign tab_1_title = section.settings.product_tab_1 %}
+{% assign tab_2 = section.settings.product_tab_2 %}
+{% assign tab_3 = section.settings.product_tab_3 %}
+{% assign showRel = section.settings.showRel %}
+
+<!-- Mustache Templates for rendering variant popover -->
+<div data-section-id="{{ section.id }}" data-section-type="product-template">
+  <section class="product container-wrap js-product-template clearfix row row-lg" data-zoom="{{ zoom }}">
+    <div class="container">
+      <div class="row">
+        <div class="breadcrumbs block">
+          {% if settings.show_breadcrumbs %}
+          {% include 'site-breadcrumbs' %}
+          {% endif %}
+        </div>
+      </div>
+    
+    {% comment %} Set the layout for the variant images {% endcomment %}
+    {% for image in product.images %}
+      {% if forloop.length <= 2 %}
+          {% assign thumbnail_width = 'product-image--100' %}
+      {% elsif forloop.length == 3 %}
+        {% assign thumbnail_width = 'product-image--50' %}
+      {% elsif forloop.length == 4 %}
+        {% assign thumbnail_width = 'product-image--33' %}
+      {% else %}
+        {% assign thumbnail_width = 'product-image--25' %}
+      {% endif %}
+      {% assign length = forloop.length %}
+    {% endfor %}
+
+      <div class="js-productImgSlider productImgSlider row row-lg product-layout-{{ layout }}" data-dots="true" data-arrows="{{ arrows }}">
+        {%for image in product.images %}
+            <div class="js-slide product-image {{ thumbnail_width }} product-image--fit block s1" data-image="{{ image | product_img_url: 'master'}}">
+              <div class="product-image-inner">
+                <span class="product-selected-flag h4 product-status-flag">{{ 'products.labels.selected_product' | t }}</span>
+                <!-- <span class="product-selected-mark"></span> -->
+                <img itemprop="image" src="{{ image | product_img_url: 'master'}}" class="product-image-img" alt="{{ image.alt }}">
+                <div class="js-MobileZoom mobile-zoom"><i class="icon-zoom"></i></div>
+              </div>
+            </div>
+        {% endfor %}
+        <span class="ie8-after"></span>
+      </div>
+      <div class="product-info js-product-info row row-lg product-layout-{{ layout }}--info">
+        <div class="block s1 lg_s13 product-title--wrapper">
+          <h1 itemprop="name" class="product-title bold">{{ product.title }}</h1>
+        </div>
+        <div class="product-form block s1 lg_s23">
+          <form class="productForm" action="/cart/add" method="post">
+            <div class="productForm-block">
+
+              <select id="product-select" name="id">
+              {% for variant in product.variants %}
+                <option{% if variant == product.selected_or_first_available_variant %} selected{% endif %} value="{{ variant.id }}" data-sku="{{variant.sku}}">
+                {{ variant.title }} - {{ variant.price | money | strip_html }}
+              </option>
+              {% endfor %}
+              </select>
+
+            </div>
+            <div class="productForm-block">
+              <label class="product-option-label">{{ 'products.form.quantity' | t }}</label>
+              <div class="js-counter counter inputGroup">
+                <input type="text" class="inputCounter" name="quantity" value="1"/>
+                <span class="inputCounter-up">+&nbsp;</span>
+                <span class="inputCounter-down">&nbsp;–</span>
+              </div>
+            </div>
+            <div class="productForm-block">
+              <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+                <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+                <div class="product-price" data-price="{{ product.price }}">
+
+                  {% if on_sale == true %}
+                    <h2 class="sale">
+                      <strike class="product-compare-price">{{ product.compare_at_price | money }}</strike>&nbsp;
+                      <span class="product-sale-price" itemprop="price">{{ product.price | money }}</span>
+                    </h2>
+                  {% else %}
+                    <h2 class="product-normal-price" itemprop="price">{{ product.price | money }}</h2>
+                  {% endif %}
+
+                </div>
+                <button class="productForm-submit js-productForm-submit" type="submit" name="checkout" data-handle="{{product.handle}}">{{ 'products.form.submit' | t }}</button>
+              </div>
+            </div>
+          </form>
+
+          {% if settings.share_on_facebook or settings.share_on_twitter or settings.share_on_googleplus or settings.share_on_pinterest %}
+          <div class="product-share">
+            <span class="socialBar p">{{ 'products.product_page.product_share' | t }} {% include 'site-shareLinks' %}</span>
+          </div>
+          {% endif %}
+          <span class="divider--wide"></span>
+          <div class="product-description">
+            <div class="product-tabs">
+              {% if tab_2 != blank or tab_3 != blank %}
+                <div class="product-tab is-active">{{ tab_1_title }}</div>
+              {% endif %}
+              {% if tab_2 != blank %}
+                <div class="product-tab">{{ pages[tab_2].title }}</div>
+              {% endif %}
+              {% if tab_3 != blank %}
+                <div class="product-tab">{{ pages[tab_3].title }}</div>
+              {% endif %}
+            </div>
+
+            <div class="product-tabber js-product-tabber block s1">
+              <div class="js-slide" itemprop="description"><div class="rte p">{{product.description}}</div></div>
+              {% if tab_2 != blank %}
+                <div class="js-slide"><div class="rte p">{{pages[tab_2].content}}</div></div>
+              {% endif %}
+              {% if tab_3 != blank %}
+                <div class="js-slide"><div class="rte p">{{pages[tab_3].content}}</div></div>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  </div> <!-- end itemscope -->
+  {% if showRel %}
+
+  {% assign currentproduct = product.handle %}
+  {% assign totalproducts = 0 %}
+
+  {% for collection in product.collections limit: 1 %}
+    {% assign related = collection.handle %}
+    {% if collection.products_count > 1 %}
+      <section class="related-products container-wrap">
+        <div class="carousel container pad-med">
+          <div class="row row-sm carousel-title">
+            <h2 class="bold">{{ 'products.product_page.similar_products' | t }}</h2>
+          </div>
+          <div class="row row-lg js-carousel-slider inline">
+
+            {% for product in collections[related].products limit: 6 %}
+            
+              {% if currentproduct != product.handle %}
+
+                {% assign on_sale = false %}
+                {% if product.compare_at_price > product.price %}
+                  {% assign on_sale = true %}
+                  {% assign on_sale_class = ' is-sale' %}
+                {% endif %}
+
+                {% assign sold_out = true %}
+                {% if product.available %}
+                  {% assign sold_out = false %}
+                {% endif %}
+
+                <a aria-label = "{{product.title}}" href="{{ product.url }}" class="carousel-slide js-slide block s56 med_s12 lg_s14">
+                  <div class="carousel-slide-image" title="{{ product.featured_image.alt }}" data-bg-src="{{ product.featured_image | img_url: 'grande' }}">
+                    {% if on_sale == true or sold_out == true %}
+                      <span class="h4 product-status-flag {% if sold_out == true %}is-sold-out{% endif %}{{on_sale_class}}">
+                        {% if sold_out == true %}
+                          {{ 'products.labels.sold_out' | t }}
+                        {% else if on_sale == true %}
+                          {{ 'products.labels.on_sale' | t }}
+                        {% else if on_sale == true and sold_out == true %}
+                          {{ 'products.labels.sold_out' | t }}
+                        {% endif %}
+                      </span>
+                    {% endif %}
+                    <div class="collectionBlock-image-inner"></div>
+                  </div>
+                  <div class="carousel-slide-info">
+                    <h4 class="uppercase bold">{{ product.title }}</h4>
+                    {% if product.price_varies %}
+                      <h4>{{ 'products.labels.price_from' | t }} {{ product.price_min | money }}</h4>
+                    {% else %}
+                      {% if on_sale == true %}
+                        <h4 class="sale">
+                          <strike>{{ product.compare_at_price | money }}</strike>&nbsp;
+                          {{ product.price | money }}
+                        </h4>
+                      {% else %}
+                        <h4>{{ product.price | money }}</h4>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                </a>
+                
+              {% endif %}
+              
+            {% endfor %}
+
+          </div>
+        </div>
+      </section>
+
+      <section class="container-wrap">
+        <div class="container">
+          <div class="row row-sm inline u-center">
+          <a href="{{ collections[related].url }}" class="button inline alt cap"><i class="icon-boxes"></i>&nbsp;&nbsp;{{ 'products.product_page.similar_products_cta' | t }} {{ collections[related].title }}</a>
+          </div>
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
+  {% endif %}
+  <span id="product-json" hidden>{{ product | json }}</span>
+</div>
+
+
+{% schema %}
+  {
+      "name": "Product pages",
+      "settings": [ {
+          "type": "header",
+          "content": "Tabs",
+          "info": "In addition to the description, you have the option to enable two extra tabs for more information on your product."
+      },
+      {
+          "type": "text",
+          "id": "product_tab_1",
+          "label": "Tab one title",
+          "default": "Description",
+          "info":"The tab for the Product description."
+      }, {
+          "type": "page",
+          "id": "product_tab_2",
+          "label": "Tab two"
+      }, {
+          "type": "page",
+          "id": "product_tab_3",
+          "label": "Tab three"
+      }, {
+          "type": "header",
+          "content": "Image Zoom",
+          "info": "Enable zoom for the product images"
+      }, {
+          "type": "checkbox",
+          "id": "product_zoom_enabled",
+          "label": "Enable image zoom",
+          "default": true
+      }, {
+          "type": "header",
+          "content": "Slideshow options",
+          "info": "On mobile, if there is more than one product image, the image grid will become a slideshow"
+      }, {
+          "type": "checkbox",
+          "id": "product_slideshow_dots",
+          "label": "Show slide navigation dots",
+          "default": false
+      }, {
+          "type": "header",
+          "content": "Related products"
+      }, 
+      {
+          "type": "checkbox",
+          "id": "showRel",
+          "label": "Show related products",
+          "default": true
+      } ]
+  }
+{% endschema %}

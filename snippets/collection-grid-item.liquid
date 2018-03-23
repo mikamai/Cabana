@@ -1,0 +1,39 @@
+<div class="collectionBlock js-collectionBlock block s1 sm_s12 lg_s13{{collectionBlock--size}}">
+  {% if collection.image %}
+    <a href="{{ collection.url }}" class="collectionBlock-image" data-bg-src="{{ collection.image | img_url: 'grande' }}">
+      <div class="collectionBlock-image-inner"></div>
+    </a>
+  {% else %}
+    {% if collection.products_count > 0 %}
+      {% assign collection_no_images = false %}
+      {% for product in collection.products %}
+        {% if product.featured_image %}
+          {% assign collection_fallback_img = product.featured_image %}
+          {% break %}
+        {% else %}
+          {% assign collection_no_images = true %}
+        {% endif %}
+      {% endfor %}
+      {% if collection_no_images == false %}
+        <a href="{{ collection.url }}" class="collectionBlock-image" data-bg-src="{{ collection_fallback_img | img_url: 'grande' }}">
+          <div class="collectionBlock-image-inner"></div>
+        </a>
+      {% else %}
+        <a href="{{ collection.url }}" class="collectionBlock-image" data-bg-src="">
+          <div class="collectionBlock-image-inner collection-error">
+            <div class="no-products h4">{{ 'collections.grid.no_images' | t }}</div>
+          </div>
+        </a>
+      {% endif %}
+    {% else %}
+      <a href="{{ collection.url }}" class="collectionBlock-image" data-bg-src="">
+        <div class="collectionBlock-image-inner collection-error">
+          <div class="no-products h4">{{ 'collections.grid.no_products' | t }}</div>
+        </div>
+      </a>
+    {% endif %}
+  {% endif %}
+  <div class="collectionBlock-info">
+    <a href="{{ collection.url }}"><h4 class="uppercase">{{ collection.title }}</h4></a>
+  </div>
+</div>

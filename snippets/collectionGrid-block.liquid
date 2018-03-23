@@ -1,0 +1,89 @@
+{% if fallback %}
+  <div class="collectionBlock js-collectionBlock block s1 sm_s12 {% unless template == 'collection' %} lg_s13 {% else %}{{ collectionBlock--size }}{% endunless %}">
+    <div class="collectionBlock-image svg-placeholder">
+        {{ 'collection-2' | placeholder_svg_tag }}
+    </div>
+    <div class="collectionBlock-info">
+      <h4 class="uppercase bold">Product title</h4>
+      <p class="h4">$99</p>
+    </div>
+  </div>
+{% else %}
+  {% assign on_sale = false %}
+  {% if product.compare_at_price > product.price %}
+    {% assign on_sale = true %}
+    {% assign on_sale_class = ' is-sale' %}
+  {% endif %}
+
+  {% assign sold_out = true %}
+  {% if product.available %}
+    {% assign sold_out = false %}
+  {% endif %}
+
+  {% if showFeatured %}
+    {% if counter > product_limit %}
+      {% assign product_limit = product_limit | minus: 2 %}
+    {% endif %}
+  {% endif %}
+
+  {% if counter > product_limit %}
+    {% assign product_status = 'product-in-waiting' %}
+  {% endif %}
+
+  <div class="collectionBlock js-collectionBlock block s1 sm_s12 {% unless template == 'collection' %} lg_s13  {% else %} {{ collectionBlock--size }} {{product_status}} {% endunless %}">
+    {% comment%} N.B. Product here refers to the iterator, not necessarily a "product" {% endcomment %}
+    {% if product.object_type == 'article' %}
+      {% assign img_tag = '<' | append: 'img' %}
+      {% if product.image %}
+        {% assign src = product | img_url: 'grande' %}
+      {% elsif product.content contains img_tag %}
+        {% assign src = product.content | split: 'src="' %}
+        {% assign src = src[1] | split: '"' | first | remove: 'https:' | remove: 'http:' %}
+      {% endif %}
+    {% elsif product.object_type == 'product' %}
+      {% assign src = product.featured_image | img_url: 'grande' %}
+    {% endif %}
+    <a aria-label="{{product.title}}" href="{{ product.url | within: collection }}" title="{% if product.object_type == 'product' %}{{ product.featured_image.alt }}{%elsif product.object_type == 'article' %}{{product.title | escape}}{% endif%}" class="collectionBlock-image" data-bg-src="{{ src }}">
+
+      {% if product.object_type == 'product' %}
+        {% if on_sale == true or sold_out == true %}
+          <span class="h4 product-status-flag{%if sold_out == true %} is-sold-out{%endif%}{{on_sale_class}}">
+            {% if sold_out == true %}
+              {{ 'products.labels.sold_out' | t }}
+            {% else if on_sale == true %}
+              {{ 'products.labels.on_sale' | t }}
+            {% else if on_sale == true and sold_out == true %}
+              {{ 'products.labels.sold_out' | t }}
+            {% endif %}
+          </span>
+        {% endif %}
+      {% endif %}
+
+      {% if product.object_type == 'product' %}
+        <div class="collectionBlock-image-inner">
+          <div data-handle="{{ product.handle }}" class="js-quickView quickView-button button">{{ 'collections.grid.quick_view' | t }}</div>
+        </div>
+      {% endif %}
+    </a>
+    <div class="collectionBlock-info">
+      <a tabindex="-1" href="{{ product.url | within: collection }}"><h4>{{ product.title }}</h4></a>
+      {% if product.price_varies %}
+        <p>{{ 'products.labels.price_from' | t }} {{ product.price_min | money }}</p>
+      {% else %}
+        {% if on_sale == true %}
+          <p class= "sale">
+            <strike>{{ product.compare_at_price | money }}</strike>&nbsp;
+            {{ product.price | money }}
+          </p>
+        {% else %}
+          <p >{{ product.price | money }}</p>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <script type="application/json" class = "product-json">
+      {{ product | json }}
+    </script>
+    <!-- .js-quickView is appended to .js-collectionBlock here -->
+  </div>
+{% endif %}

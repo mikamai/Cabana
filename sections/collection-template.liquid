@@ -1,0 +1,218 @@
+{% comment %} Settings {% endcomment %}
+{% assign showTitle = section.settings.showTitle %}
+{% assign showBanner = section.settings.showBanner %}
+{% assign showFilter = section.settings.showFilter %}
+{% assign showSortFilter = section.settings.showSortFilter %}
+{% assign showFeatured = section.settings.showFeatured %}
+{% assign showBread = section.settings.showBread %}
+{% assign grid = 3 %}
+{% assign columns = section.settings.columns | plus: 0 %}
+
+{% if showFeatured %}
+  {% assign product_limit = section.settings.limit | plus: 2 %}
+{% else %}
+  {% assign product_limit = section.settings.limit | plus: 0 %}
+{% endif %}
+
+
+{% assign mo_products_mo_problems = section.settings.limit %}
+{% paginate collection.products by collection.all_products_count %}
+<div data-section-id="{{ section.id }}" data-section-type="collection-template">
+  {% comment %}
+    Set collectionBlock size classes
+    These are applied in the collectionGrid-block.liquid file
+  {% endcomment %}
+  {% if columns == 2 %}
+    {% assign collectionBlock--size = ' lg_s12' %}
+  {% elsif columns == 3 %}
+    {% assign collectionBlock--size = ' lg_s13' %}
+  {% elsif columns == 4 %}
+    {% assign collectionBlock--size = ' lg_s14' %}
+  {% elsif columns == 5 %}
+    {% assign collectionBlock--size = ' lg_s15' %}
+  {% endif %}
+
+  {% if showFeatured %}
+    {% assign featured = ' has-featured-products' %}
+  {% endif %}
+
+
+    {% if showTitle or showDescription or collection.handle == 'all' %}
+      <section class="page-title container-wrap">
+        <div class="container">
+          {% if showTitle %}
+            <div class="row row-lg inline u-center">
+              <h1>{{collection.title}}
+              {% for tag in collection.all_tags %}
+                {% if current_tags contains tag %}
+                &#8250; {{ tag }}
+                {% endif %}
+              {% endfor %}
+              </h1>
+            </div>
+          {% endif %}
+          {% if collection.description != blank %}
+            <div class="row row-sm inline u-center">
+              <div class="rte p">{{ collection.description }}</div>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if showBanner and collection.image %} 
+      <section class="banner container-wrap">
+        <div class="container">
+          <div class="row row-lg">
+            <div class="banner-inner banner-padded">
+              <div class="banner-img" data-bg-src="{{ collection.image | img_url: '2000x' }}"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    {%endif%}
+
+    <section class="collectionGrid container-wrap">
+      <div class="container">
+        <div class="collectionGrid-nav collectionGrid-row row inline row-lg">
+          <div class="breadcrumbs block">
+            {% if settings.show_breadcrumbs %}
+              {% include 'site-breadcrumbs' %}
+            {% endif %}
+          </div>
+
+          <div class="grid-filter block">
+            {% if showFilter == true %}
+              <div class="tag-filter block">
+                <label for="#tagFilter">{{ 'collections.tag_filtering.filter_label' | t }}</label>
+                <span class="selectArrow"></span>
+                <select class="tagFilter filter" id="tagFilter">
+                  <option value="/collections/{{ collection.handle }}">{{ 'collections.tag_filtering.default_filter' | t }}</option>
+                  {% for tag in collection.all_tags %}
+                    {% if current_tags contains tag %}
+                      <option value="/collections/{{ collection.handle }}/{{ tag | handle }}" selected>{{ tag }}</option>
+                    {% else %}
+                      <option value="/collections/{{ collection.handle }}/{{ tag | handle }}">{{ tag }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div> 
+            {% endif %}
+            {% if showSortFilter == true %}
+            <div class="collectionGrid-filter block">
+              <label for="#collectionFilter">{{ 'collections.sorting_dropdown.label' | t }}</label>
+              <span class="selectArrow"></span>
+              {% assign sort_by = collection.sort_by %}
+              <select class="filter" id="collectionFilter">
+                <option value="">{{ 'collections.sorting_dropdown.all' | t }}</option>
+                <option value="best-selling" {% if sort_by == "best-selling" %}selected{% endif %}>{{ 'collections.sorting_dropdown.best_selling' | t }}</option>
+                <option value="price-ascending" {% if sort_by == "price-ascending" %}selected{% endif %}>{{ 'collections.sorting_dropdown.price_ascending' | t }}</option>
+                <option value="price-descending" {% if sort_by == "price-descending" %}selected{% endif %}>{{ 'collections.sorting_dropdown.price_descending' | t }}</option>
+                <option value="title-ascending" {% if sort_by == "title-ascending" %}selected{% endif %}>{{ 'collections.sorting_dropdown.title_ascending' | t }}</option>
+                <option value="title-descending" {% if sort_by == "title-descending" %}selected{% endif %}>{{ 'collections.sorting_dropdown.title_descending' | t }}</option>
+                <option value="created-ascending" {% if sort_by == "created-ascending" %}selected{% endif %}>{{ 'collections.sorting_dropdown.created_ascending' | t }}</option>
+                <option value="created-descending" {% if sort_by == "created-descending" %}selected{% endif %}>{{ 'collections.sorting_dropdown.created_descending' | t }}</option>
+              </select>
+            </div>
+            {% endif %}
+          </div>  
+          <span class="ie8-after"></span>
+        </div>
+        <div class="collectionGrid-load load-more-icon"></div>
+
+        {% if collection.all_products_count == 0 %}
+          <div class="collection-no-products row row-lg inline u-center empty-collection">
+            <h4>{{ 'collections.errors.no_products' | t }}</h4>
+            <a class="button" href="/collections/all">{{ 'collections.errors.continue_shopping' | t }}</a>
+          </div>
+        {% endif %}
+
+        <div class="js-collectionGrid collectionGrid-row row inline row-lg{{featured}}" data-products-limit = "{{mo_products_mo_problems}}">
+          {% assign counter = 0 %}
+          {% for product in products %}
+            {% assign counter = counter | plus: 1 %}
+            {% include 'collectionGrid-block' %}
+          {% endfor %}
+
+          <div class="gridSpacer item block s1 sm_s12 lg_s13{% if threeCol == true %} xl_s13{% else %} xl_s14{% endif %}"></div>
+          <div class="gridSpacer item block s1 sm_s12 lg_s13{% if threeCol == true %} xl_s13{% else %} xl_s14{% endif %}"></div>
+
+        </div>
+        {% if collection.products_count > product_limit %}
+          <div class="row row-lg inline u-center">
+            <button class="js-loadMore loadMore button">{{ 'collections.pagination.load_more' | t }}</button>
+            <div class="load-more-icon"></div>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+</div>
+</div>
+{% endpaginate %}
+{% schema %}
+   {
+  "name": "Collection pages",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "showTitle",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "showFilter",
+      "label": "Show Browse By tag filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "showSortFilter",
+      "label": "Show Sort By filter",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Banner image"
+    },
+    {
+      "type": "checkbox",
+      "id": "showBanner",
+      "label": "Show collection image as a banner",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "showFeatured",
+      "label": "Feature first two products",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Products per row",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "label": "Products per page",
+      "default": 18
+    }
+  ]
+}
+{% endschema %}

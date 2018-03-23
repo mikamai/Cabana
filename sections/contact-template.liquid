@@ -1,0 +1,89 @@
+{% comment %} Settings {% endcomment %}
+{% assign banner = section.settings.banner %}
+{% assign showInfos = section.settings.showInfos %}
+
+{% assign locationTitle = section.settings.locationTitle %}
+{% assign locationURL = section.settings.locationURL %}
+{% assign location1 = section.settings.location1 %}
+{% assign location2 = section.settings.location2 %}
+{% assign location3 = section.settings.location3 %}
+
+{% assign contactTitle = section.settings.contactTitle %}
+{% assign contactEmail = section.settings.contactEmail %}
+
+<div data-section-id="{{ section.id }}" data-section-type="contact-template">
+  {% if banner %}
+    <section class="banner banner-about container-wrap">
+      <div class="container">
+        <div class="row row-lg">
+          <div class="banner-inner">
+            <img src="{{ banner | img_url: '2000x' }}" alt="{{ page.title | escape }}">
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+  <div class="container-wrap">
+    <div class="contact-form-container container">
+      <div class="row row-med">
+        <div class="contact-column contact-column-form">
+          <h1 class="bold">{{ page.title }}</h1>
+          <div class="content-wrapper text-content rte">
+            {{ page.content }}
+          </div>
+          <div class="contact-form">
+            {% form 'contact' %}
+
+              {% if form.posted_successfully? %}
+                <div class="successForm feedback">
+                  <p>{{ 'contact.form.submit_success' | t }}</p>
+                </div>
+              {% else %}
+                {% if form.errors %}
+                <div class="feedback error p">
+                  {{ form.errors | default_errors }}
+                </div>
+                {% endif %}
+                <div id="contactFormWrapper">
+                  <p>
+                    <label for="contactFormName">{{ 'contact.form.name_field' | t }}</label>
+                    <input type="text" id="contactFormName" name="contact[name]" />
+                  </p>
+                  <p>
+                    <label for="contactFormEmail">{{ 'contact.form.email_field' | t }}</label>
+                    <input type="email" id="contactFormEmail" name="contact[email]" />
+                  </p>
+                  <p>
+                    <label for="contactFormTelephone">{{ 'contact.form.phone_field' | t }}</label>
+                    <input type="telephone" id="contactFormTelephone" name="contact[phone]" />
+                  </p>
+                  <p>
+                    <label for="contactFormMessage">{{ 'contact.form.message_field' | t }}</label>
+                    <textarea rows="15" cols="75" id="contactFormMessage" name="contact[body]"></textarea>
+                  </p>
+                  <p>
+                    <input type="submit" id="contactFormSubmit" class="button" value="{{ 'contact.form.submit_button' | t }}" />
+                  </p>
+                </div><!-- contactWrapper -->
+              {% endif %}
+            {% endform %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Contact pages",
+        "settings": [  {
+            "type": "header",
+            "content": "Banner image"
+        }, {
+            "type": "image_picker",
+            "id": "banner",
+            "label": "Image"
+        } ]
+    }
+{% endschema %}

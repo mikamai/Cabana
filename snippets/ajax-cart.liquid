@@ -1,0 +1,96 @@
+<script id="CartTemplate" type="text/x-handlebars-template">
+<div class="cart-title block s1 u-center">
+	<h1>{{ 'cart.labels.cart_title' | t }}</h1>
+	<h4>{{ 'cart.labels.total_items' | t }} (<span id="CartItemCount">{% raw %}{{item_count}}{% endraw %}</span>)</h4>
+</div>
+
+<form action="/cart" method="post">
+	<div class="cart-table d-table">
+		<div class="med_hide d-table-header">
+			<div class="d-table-row">
+				<div class="cart-product-thumb d-table-cell"></div>
+				<div class="d-table-cell"></div>
+				<div class="cart-product-quantity d-table-cell">
+					<h3 class="c-gray">{{ 'cart.labels.quantity' | t }}</h3>
+				</div>
+				<div class="cart-product-total d-table-cell">
+					<h3 class="c-gray">{{ 'cart.labels.total' | t }}</h3>
+				</div>
+				<div class="cart-product-remove d-table-cell"></div>
+			</div>
+		</div>
+
+		<div class="med_hide d-table-footer">
+			<div class="d-table-row">
+				<div class="d-table-cell"></div>
+				<div class="d-table-cell"></div>
+				<div class="d-table-cell">
+					<button class="cart-update" type="submit" name="update" value="Update +">{{ 'cart.labels.update' | t }} <i class="icon-update"></i></button>
+				</div>
+				<div class="d-table-cell"></div>
+				<div class="cart-subtotal-title d-table-cell" colspan="2">
+					<h3 class="c-gray u-margin-0">{{ 'cart.labels.subtotal' | t }}</h3>
+				</div>
+			</div>
+		</div>
+
+		<div id="CartItems" class="med_d-block d-table-row-group">
+			{% raw %}
+			{{#items}}
+
+			<div class="line-item med_u-container med_u-block med_u-row d-table-row">
+				<div class="cart-product-thumb med_u-block med_d-block d-table-cell">
+					<a class="product-thumbnail" href="{{ url }}" data-bg-src="{{ img }}"></a>
+				</div>
+				<div class="cart-product-desc med_u-block med_d-block d-table-cell">
+					<a class="h4 cap" href="{{ url }}">{{ name }}</a>
+					{{#if variation}}
+						<h3 class="u-margin-0">{{ variation }}</h3>
+					{{/if}}
+          <h3 class="product-price u-margin-0" data-price="{{price}}">{{{price_formatted}}}</h3>
+				</div>
+				<div class="cart-product-quantity med_u-block med_d-block d-table-cell">
+
+					<div class="js-counter counter inputGroup">
+		              <input type="text" name="updates[]" id="updates_{{id}}" class="inputCounter" value="{{itemQty}}" />
+		              <span class="inputCounter-up">+&nbsp;</span>
+		              <span class="inputCounter-down">&nbsp;–</span>
+		            </div>
+
+				</div>
+
+        <div class="cart-product-total h4 med_u-block med_d-block d-table-cell">{{{price_formatted}}}</div>
+
+				<div class="cart-product-remove med_d-block-ab d-table-cell">
+					<a href="/cart/change?line={{math @index "+" 1}}&quantity=0"><i class="icon-close h4"></i></a>
+				</div>
+			</div>
+
+			{{/items}}
+			{% endraw %}
+
+		</div>
+	</div>
+	<span class="clear-both"></span>
+	<div class="checkout-buttons row inline">
+	    <div class="block s1 u-right u-margin-b-sm">
+        <h2><strong>{% raw %}{{{totalPrice}}}{% endraw %}</strong></h2>
+	    	<h3 class="c-gray">{{ 'cart.labels.excluding_tax_and_shipping' | t }}</h3>
+	    </div>
+      {% if settings.enable_cart_order_notes %}
+        <div class="order-notes">
+          <label class="order-notes__label" for="order-notes">Order notes</label>
+          <textarea id="order-notes" class="order-notes__content" name="note"></textarea>
+        </div>
+      {% endif %}
+	    <a href="{% raw %}{{{ continue_shopping_url }}}{% endraw %}" class="button block sm_s12 med_s25 lg_s13 xxl_s14 sm_hide">{{ 'cart.labels.continue_shopping' | t }}</a>
+	    <button class="cart-checkout block s1 sm_s12 med_s25 lg_s13 xxl_s14 u-margin-b-sm" type="submit" name="checkout">{{ 'cart.labels.checkout' | t }}</button>
+	    <a href="{% raw %}{{{ continue_shopping_url }}}{% endraw %}" class="block sm_s12 med_s25 lg_s13 xxl_s14 sm_show u-center"><h4>‹ {{ 'cart.labels.continue_shopping' | t }}</h4></a>
+	</div>
+	{% if additional_checkout_buttons %}
+		<div class="additional-checkout-buttons row inline">
+			{{ content_for_additional_checkout_buttons }}
+		</div>
+	{% endif %}
+</form>
+</script>

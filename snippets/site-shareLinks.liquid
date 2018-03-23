@@ -1,0 +1,28 @@
+{% if template contains 'article' or template contains 'blog' %}
+  {% capture permalinkURL %}{{ shop.url }}{{ article.url }}{% endcapture %}
+  {% capture shareTitle %}{{ article.title | append: ' - ' | append: shop.name | url_param_escape }}{% endcapture %}
+  {% if article.image %}
+    {% assign src = article.image | img_url: 'master' %}
+  {% endif %}
+{% elsif template contains 'product' %}
+  {% capture permalinkURL %}{{ shop.url }}{{ product.url }}{% endcapture %}
+  {% capture shareTitle %}{{ product.title | append: ' - ' | append: shop.name | url_param_escape }}{% endcapture %}
+  {% if product.featured_image %}
+    {% assign src = product.featured_image | img_url: 'master' %}
+  {% endif %}
+{% endif %}
+
+{% capture twitterShareURL %}//twitter.com/intent/tweet?text={{ shareTitle }}&amp;url={{ permalinkURL }}{% if settings.twitter_via != '' %}&amp;via={{ settings.twitter_via | replace: '@','' }}{% endif %}{% endcapture %}
+
+{% if settings.share_on_twitter %}
+  <a aria-label = "{{ 'general.footer.twitter' | t }}" target="_blank" href="{{ twitterShareURL }}" class="share-link icon-twitter diamond-outline" data-network="twitter"><div class="diamond"></div></a>
+{% endif %}
+{% if settings.share_on_facebook %}
+  <a aria-label = "{{ 'general.footer.facebook' | t }}" target="_blank" href="//www.facebook.com/sharer.php?u={{ permalinkURL }}" class="share-link icon-facebook diamond-outline" data-network="facebook"><div class="diamond"></div></a>
+{% endif %}
+{% if settings.share_on_googleplus %}
+  <a aria-label = "{{ 'general.footer.googleplus' | t }}" target="_blank" href="//plus.google.com/share?url={{ permalinkURL }}" class="share-link icon-googleplus diamond-outline" data-network="googleplus"><div class="diamond"></div></a>
+{% endif %}
+{% if template contains 'product' and settings.share_on_pinterest %}
+  <a aria-label = "{{ 'general.footer.pinterest' | t }}" target="_blank" href="//pinterest.com/pin/create/button/?description={{ shareTitle }}&amp;url={{ permalinkURL }}&amp;media={{ src }}" class="share-link icon-pinterest diamond-outline" data-network="pinterest"><div class="diamond"></div></a>
+{% endif %}

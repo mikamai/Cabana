@@ -1,0 +1,17 @@
+<div id="CartPopoverCont" class="js-cartToggle header-cartPopover"></div>
+
+<script id="CartPopover" type="text/x-handlebars-template">
+	<div class="popover-inner">
+		<div class="h3">{% raw %}{{item_count}}{% endraw %} {{ 'cart.labels.items_added' | t }}</div>
+		{% raw %}
+		<div class="popover-item-thumb" data-bg-src="{{img}}"></div>
+		<div class="popover-item-info">
+		  <span class="h4">{{name}}</span><br/>
+		  {{#if variation}}
+		  	<span class="h3">{{variation}}</span><br/>
+		  {{/if}}
+      <span class="h3">{{{price_formatted}}}</span>
+		</div>
+		{% endraw %}
+	</div>
+</script>

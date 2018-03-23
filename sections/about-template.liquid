@@ -1,0 +1,124 @@
+ {% comment %} Settings {% endcomment %}
+{% assign showTitle = section.settings.showTitle %}
+{% assign banner = section.settings.banner %}
+{% assign showSignup = section.settings.showSignup %}
+{% assign titleNewsletter = section.settings.titleNewsletter %}
+{% assign contentNewsletter = section.settings.contentNewsletter %}
+{% assign successNewsletter = section.settings.successNewsletter %}
+
+<div data-section-id="{{ section.id }}" data-section-type="about-template">
+  {% if showTitle %}
+    <section class="page-title container-wrap">
+      <div class="container">
+        <div class="row row-lg inline u-center">
+          <h1 class="bold">{{ page.title | replace: '</br>', '' }}</h1>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if banner %}
+    <section class="banner banner-about container-wrap">
+      <div class="container">
+        <div class="row row-lg">
+          <div class="banner-inner">
+              <img src="{{ banner | img_url: '2000x' }}" alt="{{ page.title | escape }}">
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <div class="container-wrap">
+    <div class="container content-about text-content row row-lg">
+      <p class="row row-sm rte">
+        {{ page.content }}
+      </p>
+    </div>
+  </div>
+
+  {% for block in section.blocks %}
+      {% assign title = block.settings.title %}
+      {% assign content = block.settings.content %}
+      {% assign position = block.settings.position %}
+      {% assign style = block.settings.style %}
+      <div class="container-wrap">
+        <div class="two-up-module container image-{{ position }} style-{{ style }}">
+          <div class="row row-lg row-two-up">
+            {% assign image = block.settings.image %}
+            <div class="col col-image">
+              {% if image %}
+                <div class="two-up-image" data-bg-src="{{ image | img_url: '1024x' }}"></div>
+              {% else %}
+                <div class="two-up-image svg-placeholder">
+                 {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="col col-text">
+              {% if title != blank or content != blank %}
+                <h2 class="bold">{{ title }}</h2>
+              {% else %}
+                <h2 class="bold">Title</h2>
+              {% endif %}
+              {% if content != blank or title != blank %}
+                {{ content }}
+              {% else %}
+                <p>Content</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+  {% endfor %}
+
+</div>
+
+{% schema %}
+    {
+        "name": "About page",
+        "settings": [ {
+            "type": "checkbox",
+            "id": "showTitle",
+            "label": "Show page title",
+            "default": true
+        }, {
+            "type": "header",
+            "content": "Banner image"
+        }, {
+            "type": "image_picker",
+            "id": "banner",
+            "label": "Image"
+        } ],
+        "blocks": [ {
+            "type": "image",
+            "name": "Image",
+            "settings": [ {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            }, {
+                "type": "select",
+                "id": "position",
+                "label": "Image position",
+                "default": "right",
+                "options": [ {
+                    "value": "left",
+                    "label": "Left"
+                }, {
+                    "value": "right",
+                    "label": "Right"
+                } ]
+            }, {
+                "type": "text",
+                "id": "title",
+                "label": "Title",
+                "default":"Our Story"
+            }, {
+                "type": "richtext",
+                "id": "content",
+                "label": "Description"
+            } ]
+        } ]
+    }
+{% endschema %}

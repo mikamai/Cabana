@@ -1,0 +1,107 @@
+<div class="container">
+  <div class="row row-lg inline u-center">
+    {% comment %}
+      If a user has successfully requested a new password, the form.posted_successfully? variable
+      is set to true within the 'recover_customer_password' form only. Within that form you'll see
+      the variable 'resetPassword' set to true, which is used to initialize timber.resetPasswordSuccess().
+    {% endcomment %}
+    <div class="block s1 med_s13" id="ResetSuccess" style="display:none;">
+      {{ 'customer.recover_password.success' | t }}
+    </div>
+  </div>
+
+  <div class="row row-lg inline u-center">
+
+    <div class="js-loginForm account-form block s1 med_s12">
+      {% form 'customer_login' %}
+        <div class="row inline">
+
+          <h1 class="block s1 u-center">{{ 'customer.login.title' | t }}</h1>
+
+          <div class="block s1 u-center p c-accent">
+            {{ form.errors | default_errors }}
+          </div>
+
+          <div class="inputGroup block s1 med_s12">
+            <label for="CustomerEmail" class="h4 c-gray">{{ 'customer.login.email' | t }}</label>
+            <input type="email" name="customer[email]" class="h4 {% if form.errors contains 'email' %} error{% endif %}" autocorrect="off" autocapitalize="off" autofocus>
+          </div>
+
+          {% if form.password_needed %}
+            <div class="inputGroup block s1 med_s12">
+              <label for="CustomerPassword" class="h4 c-gray">{{ 'customer.login.password' | t }}</label>
+              <input type="password" value="" name="customer[password]" id="CustomerPassword" class="{% if form.errors contains 'password' %} error{% endif %}" >
+            </div>
+          {% endif %}
+
+        </div> <!-- END form .row -->
+        <div class="row inline u-center">
+
+          <input type="submit" class="account-form-submit button block" value="{{ 'customer.login.sign_in' | t }}">
+
+          <div class="account-form-links block s1 row inline u-center">
+            {% if shop.customer_accounts_enabled %}
+              <a href="./register" class="h4">{{ 'customer.link.sign_up' | t }}</a>
+            {% endif %}
+            <a href="{{ shop.url }}" class="h4">{{ 'customer.login.cancel' | t }}</a>
+            {% if form.password_needed %}
+              <a href="#0" class="js-recoverToggle h4">{{ 'customer.login.forgot_password' | t }}</a>
+            {% endif %}
+          </div>
+
+        </div> <!-- END form .row -->
+      {% endform %}
+    </div>
+
+    <div class="js-recoverForm recoverForm account-form block s1 med_s12" style="display:none">
+      <div class="row inline u-center">
+
+        <h2 class="block s1 u-center">{{ 'customer.recover_password.title' | t }}</h2>
+        <p class="block s1 u-center">{{ 'customer.recover_password.subtext' | t }}</p>
+
+        <div class="block s1 med_s12">
+          {% form 'recover_customer_password' %}
+            <div class="row inline u-center">
+
+              {{ form.errors | default_errors }}
+
+              {% if form.posted_successfully? %}
+                {% assign resetPassword = true %}
+              {% endif %}
+
+              <div class="inputGroup">
+                <label for="RecoverEmail" class="h4 c-gray">{{ 'customer.recover_password.email' | t }}</label>
+                <input type="email" value="" name="email" id="RecoverEmail" autocorrect="off" autocapitalize="off">
+              </div>
+            </div>
+            <div class="row inline u-center">
+              <input type="submit" class="account-form-submit button" value="{{ 'customer.recover_password.submit' | t }}">
+
+              <div class="account-form-links">
+                <a href="#0" class="js-recoverCancel h4">{{ 'customer.recover_password.cancel' | t }}</a>
+              </div>
+            </div>
+
+          {% endform %}
+        </div>
+
+      </div>
+    </div>
+
+    {% comment %}
+      If accounts are set as optional, the following will be shown as an option
+      during checkout, not on the default /login page.
+    {% endcomment %}
+    {% if shop.checkout.guest_login %}
+
+      <h2>{{ 'customer.login.guest_title' | t }}</h2>
+
+      {% form 'guest_login' %}
+        <input type="submit" class="button" value="{{ 'customer.login.guest_continue' | t }}">
+      {% endform %}
+    {% endif %}
+
+  </div>
+</div>
+
+{{ 'account.js'  | asset_url | script_tag }}

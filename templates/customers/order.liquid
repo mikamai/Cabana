@@ -1,0 +1,257 @@
+<div class="container">
+  <div class="row row-lg">
+    <h2><a href="/account" class="account-breadcrumb f-underline">{{ 'customer.account.title' | t }}</a> › {{ 'customer.order.title' | t: name: order.name }} {{ order.name }}</h2>
+
+      <div class="block s1">
+        <h2><em>{{ 'customer.order.date' | t }} {{ order.created_at | date: "%B %d, %Y %I:%M%p" }}</em></h2>
+
+        {% if order.cancelled %}
+          <div class="errors">
+            {% assign cancelled_at = order.cancelled_at | date: "%B %d, %Y %I:%M%p" %}
+            <p class="h5">{{ 'customer.order.cancelled' | t }}: {{ order.cancelled_at |  date: "%B %d, %Y %I:%M%p" }}</p>
+            <p>{{ 'customer.order.cancelled_reason' | t }}: {{ order.cancel_reason }}</p>
+          </div>
+        {% endif %}
+
+        <div class="order-table account-table">
+
+          <div class="d-table med_d-block">
+            <div class="d-table-header">
+              <div class="d-table-row">
+                <div class="c-gray d-table-cell u-left">{{ 'customer.order.product' | t }}</div>
+                <div class="c-gray d-table-cell">{{ 'customer.order.price' | t }}</div>
+                <div class="c-gray d-table-cell">{{ 'customer.order.quantity' | t }}</div>
+                <div class="c-gray d-table-cell u-right">{{ 'customer.order.total' | t }}</div>
+              </div>
+            </div>
+
+            <div class="d-table-row-group med_d-block">
+              {% for line_item in order.line_items %}
+
+                <div id="{{ line_item.id }}" class="d-table-row med_d-block">
+
+                  <div class="order-product d-table-cell u-left med_d-block">
+                    <span class="order-product-thumb" style='background-image: url("{{ line_item.product.featured_image | img_url: "grande" }}")'></span>
+                    <a class="h4 bold c-theme" href="{{line_item.product.url}}">{{line_item.title}}</a>
+
+                    {% comment %}{% if line_item.fulfillment %}
+                      <div class="note">
+                        {% assign created_at = line_item.fulfillment.created_at | date: format: 'month_day_year' %}
+                        {{ 'customer.order.fulfilled_at' | t: date: created_at }}
+                        {% if line_item.fulfillment.tracking_number %}
+                          <a href="{{ line_item.fulfillment.tracking_url }}">
+                            {{ line_item.fulfillment.tracking_company }} #{{ line_item.fulfillment.tracking_number}}
+                          </a>
+                        {% endif %}
+                      </div>
+                    {% endif %}{% endcomment %}
+
+                  </div>
+
+                  <div class="d-table-cell med_d-block">
+                    <h4 class="med_show c-gray">{{ 'customer.order.price' | t }}</h4>
+                    {{ line_item.price | money }}
+                  </div>
+
+                  <div class="d-table-cell med_d-block">
+                    <h4 class="med_show c-gray">{{ 'customer.order.quantity' | t }}</h4>
+                    {{ line_item.quantity }}
+                  </div>
+
+                  <div class="order-product-total d-table-cell u-right med_d-block">
+                    <h4 class="med_show c-gray">{{ 'customer.order.total' | t }}</h4>
+                    {{ line_item.quantity | times: line_item.price | money }}
+                  </div>
+
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="d-table med_d-block">
+              <div class="d-table-row med_hide">
+                <div class="c-gray d-table-cell u-left">
+                  {{ 'customer.order.subtotal' | t }}
+                </div>
+                <div class="d-table-cell u-right med_d-block">
+                  {{ order.subtotal_price | money }}
+                </div>
+              </div>
+
+              {% for shipping_method in order.shipping_methods %}
+              <div class="d-table-row med_hide">
+                <div class="c-gray d-table-cell u-left">
+                  {{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})
+                </div>
+                <div class="d-table-cell med_d-block u-right">
+                  {{ shipping_method.price | money }}
+                </div>
+              </div>
+
+              {% endfor %}
+
+              {% for discount in order.discounts %}
+              <div class="d-table-row med_hide">
+                <div class="c-gray d-table-cell u-left">
+                  {{ discount.code }} {{ 'customer.order.discount' | t }}
+                </div>
+                <div class="d-table-cell med_d-block u-right">
+                  {{ discount.savings | money }}
+                </div>
+              </div>
+              {% endfor %}
+
+              {% for tax_line in order.tax_lines %}
+              <div class="d-table-row med_hide">
+                <div class="c-gray d-table-cell u-left">
+                  {{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)
+                </div>
+                <div class="d-table-cell med_d-block u-right">
+                  {{ tax_line.price | money }}
+                </div>
+              </div>
+              {% endfor %}
+              <div class="d-table-row med_hide">
+                <div class="h3 bold d-table-cell u-left no-border"><strong>{{ 'customer.order.total' | t }}</strong></div>
+                <div class="h3 bold d-table-cell med_d-block u-right no-border">{{ order.total_price | money }} {{ order.currency }}</div>
+              </div>
+
+            </div>
+
+          <!-- Mobile/Tablet show -->
+          <div class="row inline med_show">
+            <div class="order-table-summary block s1 lg_s12">
+              <div class="d-table med_d-block">
+
+                <h3 class="med_show"><strong>{{ 'customer.order.summary' | t }}</strong></h3>
+
+                <div class="d-table-row med_show">
+                  <div class="c-gray d-table-cell table-cell-summary title u-left">
+                    {{ 'customer.order.subtotal' | t }}
+                  </div>
+                  <div class="d-table-cell table-cell-summary price u-left med_d-block">
+                    {{ order.subtotal_price | money }}
+                  </div>
+                </div>
+
+                {% for shipping_method in order.shipping_methods %}
+                <div class="d-table-row med_show">
+                  <div class="c-gray d-table-cell table-cell-summary title u-left">
+                    {{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})
+                  </div>
+                  <div class="d-table-cell table-cell-summary price med_d-block u-left">
+                    {{ shipping_method.price | money }}
+                  </div>
+                </div>
+
+                {% endfor %}
+
+                {% for discount in order.discounts %}
+                <div class="d-table-row med_show">
+                  <div class="c-gray d-table-cell table-cell-summary title u-left">
+                    {{ discount.code }} {{ 'customer.order.discount' | t }}
+                  </div>
+                  <div class="d-table-cell table-cell-summary price med_d-block u-left">
+                    {{ discount.savings | money }}
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for tax_line in order.tax_lines %}
+                <div class="d-table-row med_show">
+                  <div class="c-gray d-table-cell table-cell-summary title u-left">
+                    {{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)
+                  </div>
+                  <div class="d-table-cell table-cell-summary price med_d-block u-left">
+                    {{ tax_line.price | money }}
+                  </div>
+                </div>
+                {% endfor %}
+                <div class="d-table-row med_show">
+                  <div class="h2 bold d-table-cell table-cell-summary title u-left no-border"><strong>{{ 'customer.order.total' | t }}</strong></div>
+                  <div class="h2 bold d-table-cell table-cell-summary price med_d-block u-left no-border">{{ order.total_price | money }} {{ order.currency }}</div>
+              </div> <!-- END table -->
+            </div> <!-- END containing .block -->
+          </div> <!-- END mobile/tablet -->
+
+        </div>
+
+      </div> <!-- END .block s1 -->
+
+      <div class="block s1 pad-sm">
+        <div class="row inline">
+
+          <div class="block s1 med_s13">
+            <h2>{{ 'customer.order.billing_address' | t }}</h2>
+
+            <h4><strong>{{ 'customer.order.payment_status' | t }}:</strong> {{ order.financial_status_label }}</h4>
+
+            <p>
+              {{ order.billing_address.address1 }}<br>
+
+              {% if order.billing_address.address2 != "" %}
+                {{ order.billing_address.address2 }}<br>
+              {% endif %}
+
+              {% if order.billing_address.city != "" %}
+                {{ order.billing_address.city }}
+              {% endif %}
+
+              {% if order.billing_address.province_code != "" %}
+                {{ order.billing_address.province_code | upcase }}
+              {% endif %}
+
+              {% if order.billing_address.zip != "" %}
+                {{ order.billing_address.zip | upcase }}<br>
+              {% endif %}
+
+              {% if order.billing_address.country != "" %}
+                {{ order.billing_address.country }}<br>
+              {% endif %}
+
+              {% if order.billing_address.phone != "" %}
+                {{ order.billing_address.phone }}
+              {% endif %}
+            </p>
+          </div>
+
+          <div class="block s1 med_s13">
+            <h2>{{ 'customer.order.shipping_address' | t }}</h2>
+
+            <h4><strong>{{ 'customer.order.fulfillment_status' | t }}:</strong> {{ order.fulfillment_status_label }}</h4>
+
+            <p>
+              {{ customer.default_address.address1 }}<br>
+
+              {% if customer.default_address.address2 != "" %}
+                {{ customer.default_address.address2 }}<br>
+              {% endif %}
+
+              {% if customer.default_address.city != "" %}
+                {{ customer.default_address.city }}
+              {% endif %}
+
+              {% if customer.default_address.province_code != "" %}
+                {{ customer.default_address.province_code | upcase }}
+              {% endif %}
+
+              {% if customer.default_address.zip != "" %}
+                {{ customer.default_address.zip | upcase }}<br>
+              {% endif %}
+
+              {% if customer.default_address.country != "" %}
+                {{ customer.default_address.country }}<br>
+              {% endif %}
+
+              {% if customer.default_address.phone != "" %}
+                {{ customer.default_address.phone }}
+              {% endif %}
+            </p>
+          </div>
+
+          <div class="gridSpacer block s1 med_s13"></div>
+
+      </div>
+
+  </div> <!-- END .row-lg -->
+</div> <!-- END .container -->

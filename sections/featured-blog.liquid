@@ -1,0 +1,128 @@
+{% comment %} Settings {% endcomment %}
+{% assign blogArticles = blogs[section.settings.blogName].articles %}
+{% assign blogLink = blogs[section.settings.blogName].url %}
+
+{% assign title = section.settings.title %}
+{% assign cta = section.settings.cta %}
+{% assign articlesCount = section.settings.article_count | plus: 0 %}
+
+{% comment %} Settings {% endcomment %}
+{% assign showNavDots = false %}
+{% assign showNavArrows = true %}
+{% assign mode = false %}
+{% assign autoplay = false %}
+{% assign duration = 4000 %}
+{% assign hover = true %}
+{% assign speed = 200 %}
+
+{% comment %} Section {% endcomment %}
+<section data-section-type="featured-blog" class="blogModule container-wrap style-default" id="blog-module-{{ section.id }}">
+    <div class="carousel pad-med">
+        {% if title != blank %}
+            <div class="row row-sm carousel-title">
+                <h1 class="bold">{{ title }}</h1>
+            </div>
+        {% endif %}
+        <div class="blogModule-posts row row-lg inline">
+            {% if section.settings.blogName == blank %}
+                {% for i in (1..articlesCount) %}
+                    <a href="#!" title="Article title" aria-label = "{{ article.title }}" class="blogModule-posts-post block s1 med_s12 lg_s14">
+                        <div class="carousel-slide-image svg-placeholder">
+                            {{ 'image' | placeholder_svg_tag }}
+                        </div>
+                        <div class="carousel-slide-info">
+                            <p class = "h3">Blog post title</p>
+                            <p class="post-date">Feb. 15, {{ 'now' | date: '%Y' }}</p>
+                        </div>
+                        <p>Once you create a blog post, the content will appear here.</p>
+                    </a>
+                {% endfor %}
+            {% else %}
+                {% for article in blogArticles limit: articlesCount %}
+                    <a href="{{ article.url }}" aria-label = "{{ article.title }}" title="{{ article.title }}" class="blogModule-posts-post block s1 med_s12 lg_s14">
+                            {% assign src = article.image | img_url: '1024x1024' %}
+                            <div class="carousel-slide-image" {% if article.image %} data-bg-src="{{ src }}" {% endif %}></div>
+                            <div class="carousel-slide-info">
+                                <p class = "h3">{{ article.title }}</p>
+                                <p class="post-date">{{ article.published_at | date: "%a, %b %d, %y" }}</p>
+                            </div>
+                            <p>{{ article.excerpt_or_content | truncatewords: 10 | strip_html | strip }}</p>
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% if cta != blank %}
+            <div class="row row-sm inline u-center">
+                <a href="{{ blogLink }}" class="button">{{ cta }}</a>
+            </div>
+        {% endif %}
+        <div class = "blogModule-slider" data-slick="{ 'arrows':{{ showNavArrows }}, 'dots':{{ showNavDots }}, 'autoplay':{{ autoplay }}, 'dotsClass':'slick-dots hero-dots-row row-lg row', 'autoplaySpeed':{{ duration }}, 'speed':{{ speed }}, 'pauseOnHover':{{ hover }}, 'fade':{{ mode }} }">
+         {% if section.settings.blogName == blank %}
+                {% for i in (1..articlesCount) %}
+                    <a href="/" title="Article title" aria-label = "{{ article.title }}" class="blogModule-posts-post block s1 med_s12 lg_s14">
+                        <div class="carousel-slide-image has-image fake-blog--image">
+                            {{ 'image' | placeholder_svg_tag }}
+                        </div>
+                        <div class="carousel-slide-info">
+                            <p class = "h3">Blog post title</p>
+                            <p class="post-date">Feb. 15, {{ 'now' | date: '%Y' }}</p>
+                        </div>
+                        <p>Once you create a blog post, the content will appear here.</p>
+                    </a>
+                {% endfor %}
+            {% else %}
+                {% for article in blogArticles limit: articlesCount %}
+                    <a href="{{ article.url }}" title="{{ article.title }}" aria-label = "{{ article.title }}" class="blogModule-posts-post block s1 med_s12 lg_s14 {% unless article.image %}no-image{% endunless %}">
+                            {% assign src = article.image | img_url: '1024x1024' %}
+                            {% if article.image %}
+                            <div class="carousel-slide-image  {% if article.image %}has-image{% endif %}" {% if article.image %} data-bg-src="{{ src }}" {% endif %} ></div>
+                            {% endif %}
+                            <div class="carousel-slide-info">
+                                <p class = "h3">{{ article.title }}</p>
+                                <p class="post-date">{{ article.published_at | date: "%a, %b %d, %y" }}</h>
+                                <p>{{ article.excerpt_or_content | truncatewords: 10 | strip_html | strip }}</p>
+
+                            </div>
+                    </a>
+                {% endfor %}
+            {% endif %}
+            </div>
+    </div>
+</section>
+
+{% comment %} Schema {% endcomment %}
+{% schema %}
+    {
+        "name": "Blog posts",
+        "settings": [ {
+            "type": "header",
+            "content": "Content"
+        },  {
+            "type": "blog",
+            "id": "blogName",
+            "label": "Select a blog"
+        }, 
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+        }, {
+            "type": "text",
+            "id": "cta",
+            "label": "Button text",
+            "info": "Links to blog"
+        },{
+            "type": "range",
+            "id": "article_count",
+            "label": "Posts",
+            "default":4,
+            "min":1,
+            "max":12,
+            "step":1
+        }  ],
+        "presets": [ {
+            "category": "Blog",
+            "name": "Blog posts"
+        } ]
+    }
+{% endschema %}

@@ -1,0 +1,66 @@
+{% if settings.collection_collectionGrid_columns == "3" %}
+  {% assign threeCol = true %}
+{% endif %}
+{% comment %}
+  Set the product limit for pagination.
+  Set collectionBlock size classes based on threeCol.
+  These are applied in the collectionGrid-block.liquid file
+{% endcomment %}
+{% if threeCol == true %}
+  {% assign product_limit = 12 %}
+  {% assign collectionBlock--size = ' xl_s13' %}
+{% else %}
+  {% assign product_limit = 16 %}
+  {% assign collectionBlock--size = ' xl_s14' %}
+{% endif %}
+
+<section class="page-title container-wrap">
+  <div class="container">
+    <div class="row row-lg inline u-center">
+      <h1 class="bold">{{ 'search.content.title' | t }}</h1>
+    </div>
+  </div>
+</section>
+<section class="collectionGrid container-wrap">
+  <div class="container">
+    <div class="collectionGrid-nav collectionGrid-row row inline row-lg">
+      <div class="breadcrumbs block{% if search.results_count == 0 %} search-alert{% endif %}">
+        <h4>
+        {% if search.performed %}
+          {% if search.results_count == 0 %}{{ "search.content.no_results" | t: search: search.terms }}{% else %}{{ "search.content.has_results" | t: search: search.terms }}{% endif %}
+        {% endif %}
+        </h4>
+      </div>
+      <div class="collectionGrid-filter block s1 sm_s12 lg_s23">
+        <form action="/search" method="get" class="search-page-form clearfix" role="search">
+          <input type="hidden" name="type" value="product" />
+          <input name="q" type="search" id="search-field" value="{{ search.terms | escape }}" />
+          <input type="submit" id="search-submit" class="button" value="{{ 'search.button.text' | t }}" />
+        </form>
+      </div>
+    </div>
+    {% if search.performed %}
+      {% paginate search.results by 12 %}
+        <div class="collectionGrid-load load-more-icon"></div>
+        <div class="js-collectionGrid collectionGrid-row row inline row-lg{{featured}}">
+
+          {% for product in search.results %}
+            {% include 'collectionGrid-block' %}
+            {% assign src = '' %}
+          {% endfor %}
+
+          <div class="gridSpacer item block s1 sm_s12 lg_s13{% if threeCol == true %} xl_s13{% else %} xl_s14{% endif %}"></div>
+          <div class="gridSpacer item block s1 sm_s12 lg_s13{% if threeCol == true %} xl_s13{% else %} xl_s14{% endif %}"></div>
+
+        </div>
+        {% if paginate.next %}
+          <div class="row row-lg inline u-center">
+            <a class="js-loadMore loadMore button" href="{{ paginate.next.url }}">{{ 'collections.pagination.load_more' | t }}</a>
+            <div class="load-more-icon"></div>
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    {% endif %}
+  </div>
+</section>
+

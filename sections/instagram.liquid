@@ -1,0 +1,94 @@
+{% comment %} Settings {% endcomment %}
+{% assign instaToken = section.settings.instaToken %}
+{% assign rows = section.settings.rows | plus:0 %}
+{% assign instaPostCount = rows | times:6 %}
+
+{% assign title = section.settings.title %}
+{% assign cta = section.settings.cta %}
+{% assign link = section.settings.link %}
+
+{% comment %} Section {% endcomment %}
+<section class="instagram container-wrap style-default" id="instagram-module-{{ section.id }}" data-section-type="instagram">
+    <div class="instagram-inner container">
+        {% unless title == blank and showCTA == false %}
+            <div class="instagram-titles row row-lg inline u-center">
+                {% if title != blank %}
+                    <h1 class="instagram-title inline-block align-c">{{ title }}</h1>
+                {% endif %}
+                {% if cta != blank %}
+                    <a aria-label="{{ 'instagram.link_label' | t }}" {% if link != blank %}href="{{ link }}"{% endif %} class="instagram-follow button">
+                        <i class="icon-instagram"></i>{{ cta | truncate: 20 }}
+                    </a>
+                {% endif %}
+            </div>
+        {% endunless %}
+        {% if section.settings.instaToken != blank %}
+            <div class="js-instafeed instagram-slider row row-lg inline js-insta-slider" data-insta-token="{{ instaToken }}" data-insta-count="{{ instaPostCount }}"></div>
+        {% else %}
+            <div class="js-instaholder instagram-slider row row-lg inline">
+                {% for i in (1.. instaPostCount ) %}
+                    <div class="instagram-img--wrapper">
+                        <a aria-label="{{ 'instagram.link_label' | t }}" class="instagram-img is-placeholder" target="_blank">
+                            {{ 'image' | placeholder_svg_tag }}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% comment %} Schema {% endcomment %}
+{% schema %}
+    {
+  "name": "Instagram feed",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configuration"
+    },
+    {
+      "type": "text",
+      "id": "instaToken",
+      "label": "Instagram access token",
+      "info": "[Get your access token](http://pagemilldesign.com/instagram-privacy-policy)"
+    },
+    {
+      "type": "range",
+      "id": "rows",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Rows",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Instagram"
+    },
+    {
+      "type": "text",
+      "id": "cta",
+      "label": "Follow button text",
+      "default": "Follow Us"
+    },
+    {
+      "type": "text",
+      "id": "link",
+      "label": "Follow button URL"
+    }
+  ],
+  "presets": [
+    {
+      "category": "Social media",
+      "name": "Instagram feed"
+    }
+  ]
+}
+{% endschema %}
