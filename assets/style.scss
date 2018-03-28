@@ -7,8 +7,9 @@ $med: 768px;
 $med2: 769px;
 $lg: 1023px;
 $xl: 1280px;
+$xl2: 1366px;
 
-$xxl: 1400px;
+$xxl: 1401px;
 // Colors
 $c-primary: #333333;
 $c-secondary: #2e3234;
@@ -2176,7 +2177,7 @@ NOTE: must specify z-index values for siblings.*/
 
 .bg-loading, .bg-loaded {
     background-color: $c-background;
-    // background: url(//cdn.shopify.com/s/files/1/0011/7686/2777/t/3/assets/load-more.gif?18063774971941925523) white center center no-repeat;
+    // background: url(//cdn.shopify.com/s/files/1/0011/7686/2777/t/3/assets/load-more.gif?4934406588467452179) white center center no-repeat;
     // background-size: 79px 64px !important;
 }
 
@@ -3390,6 +3391,18 @@ hr {
       top: 0;
       width: 100%;
       z-index: 0;
+    }
+    @media screen and (min-width: $lg) {
+      padding: 16px;;
+    }
+    @media screen and (min-width: $xl) {
+      padding: 26px;;
+    }
+    @media screen and (min-width: $xl2) {
+      padding: 20px;
+    }
+    @media screen and (min-width: $xxl) {
+      padding: 26px;;
     }
   }
 
@@ -5561,8 +5574,18 @@ button.slick-next, button.slick-prev {
     padding: 0 0 1rem 0;
     right: 0;
     text-align: center;
+    bottom: 90px;
     @media (min-width: $med) {
-        bottom: 30px;
+        bottom: 110px;
+    }
+    @media (min-width: $lg) {
+        bottom: 90px;
+    }
+    @media (min-width: $xl2) {
+        bottom: 90px;
+    }
+    @media (min-width: $xxl) {
+        bottom: 110px;
     }
     li {
         @include inlineRel;
@@ -5627,7 +5650,6 @@ button.slick-next, button.slick-prev {
     margin-bottom: 0;
     @media (min-width: 700px){
       max-width: 700px;
-      margin-bottom: 65px;
     }
 }
 .slide-background {
@@ -5640,6 +5662,27 @@ button.slick-next, button.slick-prev {
     z-index: 0;
     background-position: center center;
     background-repeat: no-repeat;
+    
+    @media screen and (min-width: $med){
+      height: 84%;
+      top: 8%;
+    }
+    @media screen and (min-width: $lg){
+      height: 88%;
+      top: 6%;
+    }
+    @media screen and (min-width: $xl){
+      height: 84%;
+      top: 8%;
+    }
+    @media screen and (min-width: $xl2){
+      height: 81%;
+      top: 9%;
+    }
+    @media screen and (min-width: $xxl){
+      height: 84%;
+      top: 8%;
+    }
 }
 .slide-background--blank {
   position: relative;
@@ -6795,7 +6838,7 @@ hr {
 .load-more-icon {
   width: 79px;
   height: 64px;
-  background: url(//cdn.shopify.com/s/files/1/0011/7686/2777/t/3/assets/load-more.gif?18063774971941925523) no-repeat;
+  background: url(//cdn.shopify.com/s/files/1/0011/7686/2777/t/3/assets/load-more.gif?4934406588467452179) no-repeat;
   background-size: contain;
   margin: 0 auto;
   display: none;
@@ -7426,7 +7469,7 @@ h1#password-logo a{
   &.zoom--is-loading {
     &:after {
       @include blockAb;
-      background-image: url('//cdn.shopify.com/s/files/1/0011/7686/2777/t/3/assets/load-more.gif?18063774971941925523');
+      background-image: url('//cdn.shopify.com/s/files/1/0011/7686/2777/t/3/assets/load-more.gif?4934406588467452179');
       background-position: center;
       background-repeat: no-repeat;
       background-size: 79px 64px !important;
@@ -8203,7 +8246,7 @@ h1#password-logo a{
   @media screen and (min-width: $lg) {
     margin-top: 0;
     left: 31px;
-    top: 36px;
+    top: 18px;
     /**
      * Hero only has border above $lg breakpoint even though this class will still be present.
      */
@@ -8278,7 +8321,7 @@ h1#password-logo a{
   @media screen and (min-width: $lg) {
     margin-top: 0;
     right: 40px;
-    top: 48px;
+    top: 28px;
   }
   /**
    * Hero only has border above $xs breakpoint even though this class will still be present.
@@ -8349,9 +8392,18 @@ h1#password-logo a{
     width: 220px;
   }
   @media screen and (min-width: $lg) {
-    height: 100px;
+    height: 60px;
     margin-right: 0;
     width: 240px;
+  }
+  @media screen and (min-width: $xl) {
+    height: 80px;
+  }
+  @media screen and (min-width: $xl2) {
+    height: 0px;
+  }
+  @media screen and (min-width: $xxl) {
+    height: 80px;
   }
   /**
    * Vertically align the logo.
